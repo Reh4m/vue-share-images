@@ -5,8 +5,7 @@ Fullstack application for ```Vue.js``` with users authentication, that uses a ``
 ## Getting started
 ```
 # Clone the project repository by running the command below
-
-git clone git@github.com:ammezie/techies.git
+$ git clone git@github.com:Reh4m/vue-share-images.git
 ```
 
 ## Environment variables
@@ -24,7 +23,6 @@ npm install
 # Install web app dependencies
 $ cd client
 npm install
-
 
 # Run server and web app in dev mode (localhost:8080 | locahost:4000)
 npm run dev
