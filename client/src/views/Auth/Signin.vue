@@ -2,59 +2,58 @@
   <v-container fluid>
     <v-row align="center" justify="center">
       <v-col cols="12" sm="8" md="4">
-
-        <v-card class="mt-10" flat color="#8b4367" dark :loading="loading">
-
+        <v-card flat color="#8b4367" dark :disabled="loading">
           <v-toolbar dark color="#424242">
             <v-toolbar-title>
               Welcome back
             </v-toolbar-title>
           </v-toolbar>
 
-          <v-container>
+          <v-card-text>
             <v-form
               v-model="isFormValid"
-              lazy-validation ref="form"
+              lazy-validation
+              ref="form"
               @submit.prevent="handleSigninUser"
             >
+              <v-text-field
+                filled
+                label="Username"
+                required
+                v-model="username"
+                :rules="usernameRules"
+              ></v-text-field>
 
               <v-text-field
-                filled label="Username" required
-                v-model="username" :rules="usernameRules"
-              ></v-text-field>
-              <v-text-field
-                filled label="Password" required
+                filled
+                label="Password"
+                required
                 :type="show ? 'text' : 'password'"
                 @click:append="show = !show"
                 :append-icon="show ? 'mdi-eye-outline' : 'mdi-eye-off-outline'"
-                v-model="password" :rules="passwordRules"
+                v-model="password"
+                :rules="passwordRules"
               ></v-text-field>
 
-              <v-layout>
-                <v-btn
-                  block
-                  color="#45454d"
-                  :loading="loading" :disabled="loading || !isFormValid" @click="handleSigninUser"
-                >
-                  Sign in
-                  <template v-slot:loader>
-                    <span class="custom-loader">
-                      <v-icon light>mdi-cached</v-icon>
-                    </span>
-                  </template>
-                </v-btn>
-              </v-layout>
-
+              <v-btn
+                block
+                color="#45454d"
+                :loading="loading"
+                :disabled="loading || !isFormValid"
+                @click="handleSigninUser"
+              >
+                Sign in
+                <template v-slot:loader>
+                  <span class="custom-loader">
+                    <v-icon light>mdi-cached</v-icon>
+                  </span>
+                </template>
+              </v-btn>
             </v-form>
-          </v-container>
+          </v-card-text>
 
           <v-card-actions class="signinTheme">
-            <v-btn
-              block
-              text
-              class="text-capitalize"
-              @click="goToSignUp"
-            >
+            <v-btn block text class="text-capitalize" link to="/signup">
               Don't have an account? Sign up
             </v-btn>
           </v-card-actions>
@@ -66,7 +65,6 @@
             <form-alert :message="error.message"></form-alert>
           </div>
         </v-slide-x-reverse-transition>
-
       </v-col>
     </v-row>
   </v-container>
@@ -101,9 +99,6 @@ export default {
     }
   },
   methods: {
-    goToSignUp() {
-      this.$router.push('/signup');
-    },
     handleSigninUser() {
       if (this.$refs.form.validate()) {
         this.$store.dispatch('signinUser', {

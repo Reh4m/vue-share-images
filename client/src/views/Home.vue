@@ -1,43 +1,38 @@
 <template>
-  <div>
-
+  <v-container>
     <!-- loading spinner -->
     <v-overlay v-model="loading">
-      <v-progress-circular indeterminate size="64"></v-progress-circular>
+      <v-progress-circular indeterminate size="64"/>
     </v-overlay>
 
-    <v-container class="text-center">
-
+    <v-row 
+      class="text-center" 
+      justify="center" 
+      v-if="!loading && posts.length > 0"
+    >
       <!-- explore posts button -->
-      <v-row justify="center" align="center" v-if="!loading">
-        <v-btn 
-          color="primary"
-          to="/posts"
-          large
-          dark
-        >Explore Posts</v-btn>
-      </v-row>
-
+      <v-btn color="primary" link to="/posts" large dark>
+        Explore Posts
+      </v-btn>
       <!-- posts carousel -->
-      <v-col xs="12">
+      <v-col cols="12">
         <v-carousel
           cycle
           delimiter-icon="mdi-minus"
-          v-if="!loading && posts.length > 0"
-          :show-arrows="posts.length > 0 ? true : false "
+          :show-arrows="posts.length > 0 ? true : false"
         >
           <v-carousel-item
             v-for="post in posts"
-            :key="post._id" :src="post.imageUrl"
+            :key="post._id"
+            :src="post.imageUrl"
             @click.native="goToPost(post._id)"
           >
-            <span class="display-1" id="carousel__title">{{post.title}}</span>
+            <span class="display-1" id="carousel__title">{{ post.title }}</span>
           </v-carousel-item>
         </v-carousel>
       </v-col>
-
-    </v-container>
-  </div>
+    </v-row>
+  </v-container>
 </template>
 
 <script>

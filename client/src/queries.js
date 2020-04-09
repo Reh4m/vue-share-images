@@ -56,9 +56,6 @@ export const GET_POSTS_BY_TAG = gql`
         name
         avatar
       }
-      messages {
-        _id
-      }
     }
   }
   ${ fragments.postFields }
@@ -134,7 +131,7 @@ export const GET_USER_POSTS = gql`
 `;
 
 export const INFINITE_SCROLL_POSTS = gql`
-  query( $pageNum: Int!, $pageSize: Int!) {
+  query($pageNum: Int!, $pageSize: Int!) {
     infiniteScrollPosts(pageNum: $pageNum, pageSize: $pageSize) {
       hasMore
       posts {

@@ -2,12 +2,10 @@
   <v-container fluid>
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6">
-
         <v-card flat class="transparent">
           <h1 class="darklighten--text text-center">Add Post</h1>
           <v-container>
             <v-form v-model="isFormValid" lazy-validation ref="form">
-
               <!-- image url input -->
               <v-text-field
                 filled
@@ -21,7 +19,7 @@
               <!-- image preview -->
               <v-row v-if="imageUrl">
                 <v-col class="text-center">
-                  <img class="elevation-5 responsive" :src="imageUrl"/>
+                  <img class="elevation-5 responsive" :src="imageUrl" />
                 </v-col>
               </v-row>
 
@@ -40,7 +38,7 @@
                 label="Description"
                 required
                 v-model="description"
-                :rules="descRules"
+                :rules="descriptonRules"
               ></v-textarea>
 
               <!-- categories select -->
@@ -62,11 +60,9 @@
                     color="black--text red lighten-2"
                   >
                     {{ item }}
-                    <v-icon
-                      small
-                      right
-                      @click="parent.selectItem(item)"
-                    >mdi-close</v-icon>
+                    <v-icon small right @click="parent.selectItem(item)"
+                      >mdi-close</v-icon
+                    >
                   </v-chip>
                 </template>
               </v-combobox>
@@ -92,7 +88,6 @@
             </v-form>
           </v-container>
         </v-card>
-
       </v-col>
     </v-row>
   </v-container>
@@ -130,7 +125,7 @@ export default {
       categories =>
         categories.length >= 1 || "At leasted one category is required"
     ],
-    descRules: [
+    descriptonRules: [
       desc => !!desc || "Description is required",
       desc =>
         desc.length < 200 || "Description must have less than 200 characters"
@@ -142,7 +137,7 @@ export default {
   methods: {
     handleAddPost() {
       if (this.$refs.form.validate()) {
-        // update categories to lowercase
+        // modify categories to lowercase
         this.categories = this.categories.map(
           v => v.toLowerCase()
         );

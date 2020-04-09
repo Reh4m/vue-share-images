@@ -1,7 +1,6 @@
 <template>
-  <div>
-
-    <v-container v-if="!userFavorites.length">
+  <v-container>
+    <template v-if="!userFavorites.length">
       <v-row>
         <v-col class="text-center">
           <span class="darklighten--text">
@@ -9,9 +8,9 @@
           </span>
         </v-col>
       </v-row>
-    </v-container>
+    </template>
 
-    <v-container v-else>
+    <template v-else>
       <v-row>
         <v-col
           cols="12"
@@ -20,8 +19,11 @@
           v-for="favorite in userFavorites"
           :key="favorite._id"
         >
-          <v-card 
-            class="mt-3" flat v-ripple hover
+          <v-card
+            class="mt-3"
+            flat
+            v-ripple
+            hover
             @click="goToPost(favorite._id)"
           >
             <v-img height="30vh" :src="favorite.imageUrl"></v-img>
@@ -33,9 +35,8 @@
           </v-card>
         </v-col>
       </v-row>
-    </v-container>
-
-  </div>
+    </template>
+  </v-container>
 </template>
 
 <script>
@@ -49,7 +50,7 @@ export default {
   },
   methods: {
     formatDate(date) {
-      return moment(date).format("ll");
+      return moment(date).format("LL");
     },
     goToPost(postId) {
       this.$router.push(`/posts/${postId}`)

@@ -1,135 +1,104 @@
 <template lang="html">
-  <div>
+  <v-container v-scroll="onScroll">
+    <!-- page up button -->
+    <v-fab-transition>
+      <v-btn
+        color="info"
+        dark
+        class="elevation-5"
+        fab
+        right
+        fixed
+        bottom
+        @click="goToPageTop"
+        v-show="pageUpButton"
+      >
+        <v-icon>mdi-navigation</v-icon>
+      </v-btn>
+    </v-fab-transition>
+
     <!-- post progress (shown if loading) -->
-    <v-row justify="center" align="center">
-      <v-progress-circular
-        indeterminate
-        color="primary"
-        v-show="$apollo.loading"
-      ></v-progress-circular>
-    </v-row>
-    <v-container v-if="getPostsByTag" v-scroll="onScroll">
+    <query-progress v-show="$apollo.queries.getPostsByTag.loading"/>
 
-      <!-- page up button -->
-      <v-fab-transition>
-        <v-btn
-          color="info" dark
-          class="elevation-5" fab
-          right fixed bottom
-          @click="goToPageTop"
-          v-show="pageUpButton"
-        >
-          <v-icon>mdi-navigation</v-icon>
-        </v-btn>
-      </v-fab-transition>
+    <v-row v-if="getPostsByTag">
+      <v-col cols="12" class="display-1 text-center">
+        <span class=" text-capitalize"> {{ tag }} Tags </span>
+      </v-col>
 
-     
-
-      <div class="mt-5 text-center">
-        <p class="display-1 text-capitalize">
-          {{ tag }} Tags
-        </p>
-      </div>
-
-      <!-- layout buttons -->
-       <v-layout>
-        <v-menu transition="scroll-y-transition">
-          <template v-slot:activator="{ on }">
-            <v-btn text color="primary" v-on="on">
-              <v-icon left>mdi-sort-variant</v-icon>
-              Sort by
-            </v-btn>
-          </template>
-          <v-list>
-            <v-list-item-group color="#FF6B6B" mandatory v-model="sortBy">
-              <v-list-item v-for="(item, i) in sortItems" :key="i">
-                <v-list-item-content>
-                  <v-list-item-title v-text="item.text"></v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list-item-group>
-          </v-list>
-        </v-menu>
-        <v-spacer></v-spacer>
-        <div class="hidden-xs-only">
-          <v-tooltip bottom>
+      <!-- sorting posts -->
+      <v-col cols="12">
+        <v-layout>
+          <v-spacer />
+          <v-menu transition="scroll-y-transition">
             <template v-slot:activator="{ on }">
-              <v-btn icon @click="mozaicLayout = false" v-on="on">
-                <v-icon :color="mozaicLayout ? 'grey' : 'primary'">
-                  mdi-view-grid-outline
-                </v-icon>
+              <v-btn text color="primary" v-on="on">
+                <v-icon left>mdi-sort-variant</v-icon>
+                Sort by
               </v-btn>
             </template>
-            <span>Mozaic Layout</span>
-          </v-tooltip>
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
-              <v-btn icon @click="mozaicLayout = true" v-on="on">
-                <v-icon :color="mozaicLayout ? 'primary' : 'grey'">
-                  mdi-view-agenda-outline
-                </v-icon>
-              </v-btn>
-            </template>
-            <span>Row Layout</span>
-          </v-tooltip>
-        </div>
-      </v-layout>
-
-      <!-- post card -->
-      <v-row>
-        <v-col
-          v-for="(post, index) in getPostsByTag"
-          :key="post._id"
-          cols="12"
-          :sm="6"
-          :md="mozaicLayout ? 6 : 4"
-        >
-          <v-card 
-            hover flat 
-            v-ripple="{ center: false }"
-            @click.native="goToId('posts', post._id)"
-          >
-
-            <v-img
-              class="white--text"
-              height="30vh"
-              :src="post.imageUrl"
-            ></v-img>
-
-            <!-- user info -->
-            <v-list class="py-0">
-              <v-list-item>
-                <v-list-item-avatar size="30">
-                  <img :src="post.createdBy.avatar" />
-                </v-list-item-avatar>
-
-                <v-list-item-content>
-                  <v-list-item-title
-                    
-                  >
-                    <span class=" caption darklighten--text font-weight-bold">
-                      {{ post.title }}
-                      <span class="text-capitalize indigo--text">
-                        • {{ tag }}
-                      </span>
-                    </span>
-                  </v-list-item-title>
-                  <v-list-item-subtitle>
-                    <span class="caption font-weight-bold">
-                      {{ getTimeFromNow(post.createdDate) }}
-                    </span>
-                  </v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
+            <v-list>
+              <v-list-item-group color="#FF6B6B" mandatory v-model="sortBy">
+                <v-list-item
+                  v-for="(item, index) in sortItems"
+                  :key="index"
+                  @click="sortPostsBy(item.sortBy, item.prop)"
+                >
+                  <v-list-item-content>
+                    <v-list-item-title>
+                      {{ item.title }}
+                    </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list-item-group>
             </v-list>
+          </v-menu>
+        </v-layout>
+      </v-col>
 
-          </v-card>
-        </v-col>
-      </v-row>
+      <!-- posts card -->
+      <v-col
+        v-for="(post, index) in getPostsByTag"
+        :key="post._id"
+        cols="12"
+        :sm="6"
+        :md="mozaicLayout ? 6 : 4"
+      >
+        <v-card
+          hover
+          flat
+          v-ripple="{ center: false }"
+          @click.native="goToId('posts', post._id)"
+        >
+          <v-img class="white--text" height="30vh" :src="post.imageUrl" />
 
-    </v-container>
+          <!-- user info -->
+          <v-list class="py-0">
+            <v-list-item>
+              <v-list-item-avatar size="30">
+                <img :src="post.createdBy.avatar" />
+              </v-list-item-avatar>
 
-  </div>
+              <v-list-item-content>
+                <v-list-item-title>
+                  <span class=" caption darklighten--text font-weight-bold">
+                    {{ post.title }}
+                    <span class="text-capitalize indigo--text">
+                      • {{ tag }}
+                    </span>
+                  </span>
+                </v-list-item-title>
+                <v-list-item-subtitle>
+                  <span class="caption font-weight-bold">
+                    {{ getTimeFromNow(post.createdDate) }}
+                  </span>
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -138,24 +107,26 @@ import { GET_POSTS_BY_TAG } from "../queries";
 import { mapGetters } from "vuex";
 import NotFound from './Errors/NotFound.vue';
 
+const pageSize = 6;
+
 export default {
   name: 'tags',
   props: {
     tag: String
   },
   data: () => ({
-    page: 1,
-    errors: false,
-    show: false,
+    getTag: '',
+    pageNum: 1,
+    isPageBottom: false,
     amountScrolled: 0,
     isPageBottom: false,
     pageUpButton: false,
     mozaicLayout: false,
     sortItems: [
-      { text: "Newest (default)" },
-      { text: "Oldest" },
-      { text: "Most likes" },
-      { text: "Least likes" }
+      { title: "Newest (default)", sortBy: 'createdDate', prop: 'desc'},
+      { title: "Oldest", sortBy: 'createdDate', prop:  'asc' },
+      { title: "Most likes", sortBy: 'likes', prop: 'desc' },
+      { title: "Least likes", sortBy: 'likes', prop: 'asc' }
     ],
     sortBy: 0
   }),
@@ -164,55 +135,33 @@ export default {
       query: GET_POSTS_BY_TAG,
       variables() {
         return {
-          tag: this.tag
+          tag: this.tag,
         }
       },
       error(err) {
         this.$_error(NotFound, { message: err.message });
-        this.errors = true;
-      }
-    }
-  },
-  watch: {
-    sortBy(value) {
-      switch (value) {
-        case 0: 
-          return this.getPostsByTag.sort((a, b) =>
-            new Date(a.createdDate) >
-            new Date(b.createdDate)
-            ? -1 : 1
-          );
-          break;
-        case 1:
-          return this.getPostsByTag.sort((a, b) =>
-            new Date(a.createdDate) <
-            new Date(b.createdDate)
-            ? -1 : 1
-          );
-          break;
-        case 2: this.sortByMost("likes");
-          break;
-        case 3: this.sortByLeast("likes");
-          break;
       }
     }
   },
   methods: {
-    sortByMost(prop) {
-      return this.getPostsByTag.sort((a, b) =>
-        a[prop] > b[prop] ? -1 : 1
-      );
-    },
-    sortByLeast(prop) {
-      return this.getPostsByTag.sort((a, b) =>
-        a[prop] < b[prop] ? -1 : 1
-      );
+    // sorting posts list by value
+    sortPostsBy(prop, value) {
+      this.getPostsByTag.sort((a, b) => {
+        switch (value) {
+          case 'desc':
+            return a[prop] > b[prop] ? -1 : 1;
+            break;
+          case 'asc':
+            return a[prop] < b[prop] ? -1 : 1;
+            break;
+        }
+      });
     },
     goToId(route, id) {
       this.$router.push(`/${route}/${id}`);
     },
     getTimeFromNow(time) {
-      return moment(time).fromNow();
+      return moment(time).format('LL');
     },
     onScroll() {
       this.checkIfPageBottom();
@@ -234,12 +183,9 @@ export default {
     },
   },
   beforeDestroy() {
-    if (this.errors !== true) {
-      this.getPostsByTag.sort((a, b) =>
-        new Date(a.createdDate) >
-        new Date(b.createdDate)
-        ? -1 : 1
-      );
+    // change to default posts list
+    if (this.sortBy !== 0) {
+      this.sortPostsBy('createdDate', 'desc');
     };
   },
 }

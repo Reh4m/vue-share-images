@@ -1,33 +1,23 @@
 <template>
-  <div>
-
+  <v-container>
     <!-- user progress (shown if loading) -->
-    <v-row
-      v-if="$apollo.queries.getUser.loading"
-      justify="center" align="center"
-      style="height: 100px;" 
-    >
-      <v-progress-circular
-        indeterminate
-        color="primary"
-      ></v-progress-circular>
-    </v-row>
+    <query-progress v-show="$apollo.queries.getUser.loading" />
 
-    <v-container v-if="getUser && getUserPosts">
-
+    <template v-if="getUser && getUserPosts">
       <!-- user details card -->
       <v-card flat tile>
         <v-container>
           <v-list-item three-line>
             <v-list-item-avatar size="80" style="border: 10px">
-              <v-img :src="getUser.avatar"/>
+              <v-img :src="getUser.avatar" />
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title 
+              <v-list-item-title
                 class="
-                  title 
-                  text-capitalize darklighten--text
-                "
+                    title 
+                    text-capitalize 
+                    darklighten--text
+                  "
               >
                 {{ getUser.name }}
               </v-list-item-title>
@@ -41,10 +31,7 @@
           </v-list-item>
         </v-container>
         <v-card-actions class="pa-0 grey lighten-5">
-          <v-tabs
-            background-color="transparent"
-            centered
-          >
+          <v-tabs background-color="transparent" centered>
             <v-tab link :to="`/profile/${userId}`">
               Posts {{ getUserPosts.length }}
             </v-tab>
@@ -52,10 +39,9 @@
         </v-card-actions>
       </v-card>
 
-      <router-view></router-view>
-
-    </v-container>
-  </div>
+      <router-view />
+    </template>
+  </v-container>
 </template>
 
 <script>

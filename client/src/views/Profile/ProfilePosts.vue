@@ -1,8 +1,7 @@
 <template>
-  <div>
-
+  <v-container>
     <!-- posts created by user -->
-    <v-container v-if="!getUserPosts.length">
+    <template v-if="!getUserPosts.length">
       <v-row>
         <v-col class="text-center">
           <span class="primary--text">
@@ -10,15 +9,18 @@
           </span>
         </v-col>
       </v-row>
-    </v-container>
+    </template>
 
-    <v-container v-else>
+    <template v-else>
       <v-row>
-        <v-col cols="12" sm="6" md="4" v-for="post in getUserPosts" :key="post._id">
-          <v-card
-            class="mt-3" flat v-ripple hover
-            @click="goToPost(post._id)"
-          >
+        <v-col
+          cols="12"
+          sm="6"
+          md="4"
+          v-for="post in getUserPosts"
+          :key="post._id"
+        >
+          <v-card class="mt-3" flat v-ripple hover @click="goToPost(post._id)">
             <v-img height="30vh" :src="post.imageUrl"></v-img>
 
             <v-card-title>
@@ -34,9 +36,8 @@
           </v-card>
         </v-col>
       </v-row>
-    </v-container>
-
-  </div>
+    </template>
+  </v-container>
 </template>
 
 <script>

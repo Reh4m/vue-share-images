@@ -1,231 +1,224 @@
 <template lang="html">
-  <div>
+  <v-container>
     <!-- post progress (shown if loading) -->
-    <v-row
-      v-if="$apollo.queries.getPost.loading"
-      justify="center" align="center"
-      style="height: 100px;" 
-    >
-      <v-progress-circular
-        indeterminate
-        color="primary"
-      ></v-progress-circular>
-    </v-row>
-    <v-container v-if="getPost">
+    <query-progress v-show="$apollo.queries.getPost.loading" />
 
-      <v-row>
-        <v-col cols="12">
-          <v-card flat>
-
-            <!-- post -->
-            <v-list-item two-line>
-              <v-list-item-avatar 
-                v-ripple
-                @click="goToUser(getPost.createdBy._id)" 
-                style="cursor: pointer;"
-              >
-                  <img :src="getPost.createdBy.avatar">
-              </v-list-item-avatar>
-              <v-list-item-content>
-                <v-list-item-title>
-                  <span class="body-2 font-weight-bold">
-                    <router-link 
-                      class="info--text" 
-                      :to="`/profile/${getPost.createdBy._id}`"
-                    >
-                      {{ getPost.createdBy.name }}
-                    </router-link>
-                  </span>
-                </v-list-item-title>
-                <v-list-item-subtitle>
-                  <span class="caption greylighten--text font-weight-bold">
-                    @{{ getPost.createdBy.username }} •
-                    {{ formatCreatedDate(getPost.createdDate) }}
-                  </span>
-                </v-list-item-subtitle>
-              </v-list-item-content>
-              <v-list-item-action>
-                <v-icon large color="info" @click="goToPreviousPage">
-                  mdi-arrow-left
-                </v-icon>
-              </v-list-item-action>
-            </v-list-item>
-
-            <!-- img -->
-            <v-tooltip 
-              bottom transition="slide-y-transition"
+    <!-- post -->
+    <v-row v-if="getPost">
+      <v-col cols="12">
+        <v-card flat>
+          <v-list-item two-line>
+            <v-list-item-avatar
+              v-ripple
+              @click="goToUser(getPost.createdBy._id)"
+              style="cursor: pointer;"
             >
-              <template v-slot:activator="{ on }">
-                <v-img 
-                  max-height="50vh" 
-                  v-on="on" 
-                  :src="getPost.imageUrl" 
-                  @click.stop="toggleImageDialog"
-                />
-              </template>
-              <span>Click to enlarge image</span>
-            </v-tooltip>
-
-            <v-dialog v-model="imageDialog">
-              <v-card>
-                <v-img 
-                  :src="getPost.imageUrl" 
-                  height="80vh" 
-                  @click.stop="toggleImageDialog"
-                />
-              </v-card>
-            </v-dialog>
-
-            <!-- description -->
-            <v-card-title>
-              {{ getPost.title }}
-            </v-card-title>
-            <v-card-text>
-              {{ getPost.description }}
-            </v-card-text>
-
-            <!-- actions -->
-            <v-list-item class="grey lighten-5">
+              <img :src="getPost.createdBy.avatar" />
+            </v-list-item-avatar>
+            <v-list-item-content>
               <v-list-item-title>
-                <v-chip-group show-arrows>
-                  <v-chip
-                    v-for="(category, index) in getPost.categories" :key="index"
-                    outlined label link
-                    :ripple="{ class: 'redlighten--text' }"
-                    :to="`/tags/${category}`"
+                <span class="body-2 font-weight-bold">
+                  <router-link
+                    class="info--text"
+                    :to="`/profile/${getPost.createdBy._id}`"
                   >
-                    {{ category }}
-                  </v-chip>
-                </v-chip-group>
+                    {{ getPost.createdBy.name }}
+                  </router-link>
+                </span>
               </v-list-item-title>
-              <v-list-item-action>
-                <template v-if="user">
-                  <v-btn
-                    v-if="checkIfPostLiked(getPost._id)"
-                    text color="red lighten-1" 
-                    @click="handleUnlikePost()"
-                    :loading="loadingLike"
-                  >
-                    <v-icon left>mdi-heart</v-icon>
-                    {{ getPost.likes }}
-                  </v-btn>
-                  <v-btn
-                    v-else
-                    text color="#707070"
-                    @click="handleLikePost()"
-                    :loading="loadingLike"
-                  >
-                    <v-icon left>mdi-heart-outline</v-icon>
-                    {{ getPost.likes }}
-                  </v-btn>
-                </template>
-                <template v-else>
-                  <v-btn
-                    text color="#707070"
-                    @click="signinRequired = true"
-                  >
-                    <v-icon left>mdi-heart-outline</v-icon>
-                    {{ getPost.likes }}
-                  </v-btn>
-                </template>
-              </v-list-item-action>
-            </v-list-item>
+              <v-list-item-subtitle>
+                <span class="caption greylighten--text font-weight-bold">
+                  @{{ getPost.createdBy.username }} •
+                  {{ formatCreatedDate(getPost.createdDate) }}
+                </span>
+              </v-list-item-subtitle>
+            </v-list-item-content>
+            <v-list-item-action>
+              <v-icon large color="info" @click="goToPreviousPage">
+                mdi-arrow-left
+              </v-icon>
+            </v-list-item-action>
+          </v-list-item>
 
-          </v-card>
-        </v-col>
-      </v-row>
+          <!-- img -->
+          <v-tooltip bottom transition="slide-y-transition">
+            <template v-slot:activator="{ on }">
+              <v-img
+                max-height="50vh"
+                v-on="on"
+                :src="getPost.imageUrl"
+                @click.stop="toggleImageDialog"
+              />
+            </template>
+            <span>Click to enlarge image</span>
+          </v-tooltip>
 
-      <v-card flat :loading="loadingDeleteMessage">
-        <v-subheader
-          class="caption darklighten--text font-weight-bold"
-        >
-          {{ getPost.messages.length }} 
-          {{ getPost.messages.length === 1 ? 'Message' : 'Messages'}}
-        </v-subheader>
-        <v-container>
+          <v-dialog v-model="imageDialog">
+            <v-card>
+              <v-img
+                :src="getPost.imageUrl"
+                height="80vh"
+                @click.stop="toggleImageDialog"
+              />
+            </v-card>
+          </v-dialog>
 
-          <v-form
-            v-if="user" v-model="isFormValid"
-            lazy-validation ref="form"
-            @submit.prevent="handleAddPostMessage"
-          >
-            <!-- message input -->
-            <v-text-field
-              v-model="messageBody"
-              filled placeholder="Add message"
-              :append-icon="messageBody && 'mdi-send'"
-              @click:append="handleAddPostMessage" 
-              :disabled="loadingMessage"
-              :rules="messageRules" :loading="loadingMessage"
-            >
-              <template v-slot:prepend>
-                <v-avatar size="25">
-                  <v-img :src="user.avatar"></v-img>
-                </v-avatar>
+          <!-- description -->
+          <v-card-title>
+            {{ getPost.title }}
+          </v-card-title>
+          <v-card-text>
+            {{ getPost.description }}
+          </v-card-text>
+
+          <!-- actions -->
+          <v-list-item class="grey lighten-5">
+            <v-list-item-title>
+              <v-chip-group show-arrows>
+                <v-chip
+                  v-for="(category, index) in getPost.categories"
+                  :key="index"
+                  outlined
+                  label
+                  link
+                  :ripple="{ class: 'redlighten--text' }"
+                  :to="`/tags/${category}`"
+                >
+                  {{ category }}
+                </v-chip>
+              </v-chip-group>
+            </v-list-item-title>
+            <v-list-item-action>
+              <template v-if="user">
+                <v-btn
+                  v-if="checkIfPostLiked(getPost._id)"
+                  text
+                  color="red lighten-1"
+                  @click="handleUnlikePost()"
+                  :loading="loadingLike"
+                >
+                  <v-icon left>mdi-heart</v-icon>
+                  {{ getPost.likes }}
+                </v-btn>
+                <v-btn
+                  v-else
+                  text
+                  color="#707070"
+                  @click="handleLikePost()"
+                  :loading="loadingLike"
+                >
+                  <v-icon left>mdi-heart-outline</v-icon>
+                  {{ getPost.likes }}
+                </v-btn>
               </template>
-            </v-text-field>
-          </v-form>
+              <template v-else>
+                <v-btn text color="#707070" @click="signinRequired = true">
+                  <v-icon left>mdi-heart-outline</v-icon>
+                  {{ getPost.likes }}
+                </v-btn>
+              </template>
+            </v-list-item-action>
+          </v-list-item>
+        </v-card>
+      </v-col>
 
-          <!-- messages -->
-          <v-list three-line>
-            <v-list-item 
-              v-for="(message, index) in getPost.messages" 
-              :key="index"
+      <!-- messages -->
+      <v-col cols="12">
+        <v-card flat :loading="loadingDeleteMessage">
+          <v-subheader class="caption darklighten--text font-weight-bold">
+            {{ getPost.messages.length }}
+            {{ getPost.messages.length === 1 ? "Message" : "Messages" }}
+          </v-subheader>
+          <v-container>
+            <v-form
+              v-if="user"
+              v-model="isFormValid"
+              lazy-validation
+              ref="form"
+              @submit.prevent="handleAddPostMessage"
             >
-              <v-list-item-avatar v-ripple>
-                <v-img :src="message.messageUser.avatar"/>
-              </v-list-item-avatar>
+              <!-- message input -->
+              <v-text-field
+                v-model="messageBody"
+                filled
+                placeholder="Add message"
+                :append-icon="messageBody && 'mdi-send'"
+                @click:append="handleAddPostMessage"
+                :disabled="loadingMessage"
+                :rules="messageRules"
+                :loading="loadingMessage"
+              >
+                <template v-slot:prepend>
+                  <v-avatar size="25">
+                    <v-img :src="user.avatar"></v-img>
+                  </v-avatar>
+                </template>
+              </v-text-field>
+            </v-form>
 
-              <v-list-item-content>
-                <v-list-item-title class="caption">
-                  <span class="font-weight-bold">
-                    <router-link 
-                      :class="checkIfDownMessage(message) ? 'indigo--text' : 'primary--text'"
-                      :to="`/profile/${message.messageUser._id}`"
-                    >
-                      {{ message.messageUser.name }}
-                    </router-link>
-                  </span>
-                </v-list-item-title>
-                <v-list-item-subtitle class="caption darklighten--text">
-                  {{ message.messageBody }}
-                </v-list-item-subtitle>
-                <v-list-item-subtitle class="caption">
-                  {{ getTimeFromNow(message.messageDate) }}
-                </v-list-item-subtitle>
-              </v-list-item-content>
+            <!-- messages -->
+            <v-list v-if="getPost.messages.length" three-line>
+              <template v-for="(message, index) in getPost.messages">
+                <v-divider v-if="index != 0" :key="message._id"/>
+                <v-list-item>
+                  <v-list-item-avatar v-ripple>
+                    <v-img :src="message.messageUser.avatar" />
+                  </v-list-item-avatar>
 
-              <v-list-item-action v-if="checkIfDownMessage(message)">
-                <v-menu left transition="scroll-y-transition">
-                  <template v-slot:activator="{ on }">
-                    <v-btn icon color="primary" v-on="on">
-                      <v-icon>mdi-dots-vertical</v-icon>
-                    </v-btn>
-                  </template>
-                  <v-list>
-                    <v-list-item
-                      @click="handleDeleteUserMessage(message._id, index)"
-                    >
-                      <v-list-item-content>
-                        <v-list-item-title>Delete</v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </v-list>
-                </v-menu>
-              </v-list-item-action>
-            </v-list-item>
-          </v-list>
+                  <v-list-item-content>
+                    <v-list-item-title class="caption">
+                      <span class="font-weight-bold">
+                        <router-link
+                          :class="
+                            checkIfDownMessage(message)
+                              ? 'indigo--text'
+                              : 'primary--text'
+                          "
+                          :to="`/profile/${message.messageUser._id}`"
+                        >
+                          {{ message.messageUser.name }}
+                        </router-link>
+                      </span>
+                    </v-list-item-title>
+                    <v-list-item-subtitle class="caption darklighten--text">
+                      {{ message.messageBody }}
+                    </v-list-item-subtitle>
+                    <v-list-item-subtitle class="caption">
+                      {{ getTimeFromNow(message.messageDate) }}
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
 
-        </v-container>
-      </v-card>
+                  <v-list-item-action v-if="checkIfDownMessage(message)">
+                    <v-menu left transition="scroll-y-transition">
+                      <template v-slot:activator="{ on }">
+                        <v-btn icon color="primary" v-on="on">
+                          <v-icon>mdi-dots-vertical</v-icon>
+                        </v-btn>
+                      </template>
+                      <v-list>
+                        <v-list-item
+                          @click="handleDeleteUserMessage(message._id, index)"
+                        >
+                          <v-list-item-content>
+                            <v-list-item-title>Delete</v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-list>
+                    </v-menu>
+                  </v-list-item-action>
+                </v-list-item>
+              </template>
+            </v-list>
+          </v-container>
+        </v-card>
+      </v-col>
 
       <signin-required
         :dialog.sync="signinRequired"
         @closeDialog="closeDialog"
       ></signin-required>
-
-    </v-container>
-  </div>
+    </v-row>
+  </v-container>
 </template>
 
 <script>

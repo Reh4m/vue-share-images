@@ -1,23 +1,24 @@
 <template lang="html">
   <div>
-
     <!-- navbar -->
     <v-app-bar app dark color="#3a9679">
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer"/>
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
 
-      <router-link class="white--text hidden-xs-only" to="/">
+      <router-link class="hidden-xs-only" to="/">
         <v-btn text large>
           Schooldevs
         </v-btn>
       </router-link>
 
-      <v-spacer class="hidden-xs-only"/>
+      <v-spacer class="hidden-xs-only" />
 
       <!-- search input -->
       <v-text-field
         v-model="searchTerm"
         class="ma-3"
-        flat filled dense
+        flat
+        filled
+        dense
         hide-details
         placeholder="Search"
         clearable
@@ -30,17 +31,19 @@
         <v-list light>
           <v-list-item
             @click="goToSearchResult(result._id)"
-            v-for="result in searchResults" :key="result._id"
+            v-for="result in searchResults"
+            :key="result._id"
           >
             <v-list-item-subtitle>
               <span class="text--primary">
                 {{ result.title }}
-              </span> • {{ formatDescription(result.description) }}
+              </span>
+              • {{ formatDescription(result.description) }}
             </v-list-item-subtitle>
 
             <!-- show icon if result favorited by user -->
             <v-list-item-action v-if="checkIfUserFavorite(result._id)">
-              <v-icon small>fas fa-heart</v-icon>
+              <v-icon small color="red">mdi-heart</v-icon>
             </v-list-item-action>
           </v-list-item>
         </v-list>
@@ -62,17 +65,19 @@
       </v-btn>
 
       <!-- profile button -->
-      <v-btn 
+      <v-btn
         text
         large
         class="hidden-xs-only"
-        color="#105e62" 
-        v-if="user" router to="/user"
+        color="#105e62"
+        v-if="user"
+        router
+        to="/user"
       >
         <v-icon class="hidden-sm-only" left>mdi-account-outline</v-icon>
         <v-badge
           color="#8b4367"
-          :class="{ 'bounce': badgeAnimated }"
+          :class="{ bounce: badgeAnimated }"
           :content="userFavorites.length"
           :value="userFavorites.length"
         >
@@ -84,9 +89,10 @@
       <v-btn
         text
         large
-        class="hidden-xs-only" 
-        color="#105e62" 
-        v-if="user" @click="handleSignoutUser"
+        class="hidden-xs-only"
+        color="#105e62"
+        v-if="user"
+        @click="handleSignoutUser"
       >
         <v-icon class="hidden-sm-only" left>mdi-logout-variant</v-icon>
         Signout
@@ -142,7 +148,6 @@
         </v-list>
       </template>
     </v-navigation-drawer>
-
   </div>
 </template>
 
@@ -168,7 +173,7 @@ export default {
     },
     handleSearchPosts() {
       this.$store.dispatch("searchPosts", {
-        searchTerm: this.searchTerm
+        searchTerm: this.searchTerm,
       });
     },
     formatDescription(desc) {
@@ -197,39 +202,65 @@ export default {
     ...mapGetters(["user", "searchResults", "loading", "userFavorites"]),
     horizontalNavItems() {
       let items = [
-        { name: "Posts", router: "/posts", icon: "mdi-newspaper-variant-multiple-outline" },
+        {
+          name: "Posts",
+          router: "/posts",
+          icon: "mdi-newspaper-variant-multiple-outline",
+        },
         { name: "Sign in", router: "/signin", icon: "mdi-login-variant" },
-        { name: "Sign up", router: "/signup", icon: "mdi-account-plus-outline" }
+        {
+          name: "Sign up",
+          router: "/signup",
+          icon: "mdi-account-plus-outline",
+        },
       ];
 
       if (this.user) {
-        items = [{ name: "Posts", router: "/posts", icon: "mdi-newspaper-variant-multiple-outline" }];
+        items = [
+          {
+            name: "Posts",
+            router: "/posts",
+            icon: "mdi-newspaper-variant-multiple-outline",
+          },
+        ];
       }
       return items;
     },
     sideNavItems() {
       let items = [
         { name: "Home", router: "/", icon: "mdi-home-outline" },
-        { name: "Posts", router: "/posts", icon: "mdi-newspaper-variant-multiple-outline" },
+        {
+          name: "Posts",
+          router: "/posts",
+          icon: "mdi-newspaper-variant-multiple-outline",
+        },
         { name: "Sign in", router: "/signin", icon: "mdi-login-variant" },
-        { name: "Sign up", router: "/signup", icon: "mdi-account-plus-outline" }
+        {
+          name: "Sign up",
+          router: "/signup",
+          icon: "mdi-account-plus-outline",
+        },
       ];
 
       if (this.user) {
         items = [
           { name: "Home", router: "/", icon: "mdi-home-outline" },
-          { name: "Posts", router: "/posts", icon: "mdi-newspaper-variant-multiple-outline" },
+          {
+            name: "Posts",
+            router: "/posts",
+            icon: "mdi-newspaper-variant-multiple-outline",
+          },
           {
             name: "Create Post",
             router: "/post/add",
-            icon: "mdi-card-text-outline"
+            icon: "mdi-card-text-outline",
           },
-          { name: "Profile", router: "/user", icon: "mdi-account-outline" }
+          { name: "Profile", router: "/user", icon: "mdi-account-outline" },
         ];
       }
       return items;
-    }
-  }
+    },
+  },
 };
 </script>
 

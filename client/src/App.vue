@@ -5,7 +5,7 @@
       <Navbar></Navbar>
 
       <transition name="fade">
-          <app-view></app-view>
+        <app-view></app-view>
       </transition>
 
       <!-- Auth Snackbar -->

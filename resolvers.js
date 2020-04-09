@@ -64,7 +64,8 @@ module.exports = {
           })
           .limit(pageSize);
       } else {
-        // if page number is greater than one, figure out how many documents to skip
+        // if page number is greater than one,
+        // figure out how many documents to skip
         const skips = pageSize * (pageNum - 1);
         posts = await Post.find({})
           .sort({ createdDate: "desc" })
@@ -92,14 +93,14 @@ module.exports = {
       }
     },
     getPostsByTag: async (_, { tag }, { Post }) => {
-      const posts = await Post.find(
-        { categories: tag }
-      )
-      .sort({ createdDate: "desc" })
-      .populate({
-        path: "messages.messageUser createdBy",
-        model: "User"
+      const posts = await Post.find({
+        categories: tag
       })
+        .sort({ createdDate: "desc" })
+        .populate({
+          path: "createdBy",
+          model: "User"
+        });
       if (posts.length === 0 ) throw new Error('Tag not found.');
       else return posts;
     },
@@ -109,7 +110,8 @@ module.exports = {
         { $text: { $search: searchTerm } },
         // assign 'searchTerm' a text score to provide best match
         { score: { $meta: "textScore" } }
-        // sort results acconding to that textScore (as well as by likes in descending order)
+        // sort results acconding to that textScore
+        // (as well as by likes in descending order)
       )
       .sort({
         score: { $meta: "textScore" },
@@ -207,7 +209,8 @@ module.exports = {
         { $inc: { likes: 1 } },
         { new: true }
       );
-      // find user, add id at post to its favorites array (whitch will be populate as posts)
+      // find user, add id at post to its favorites array
+      // (whitch will be populate as posts)
       const user = await User.findOneAndUpdate(
         { username },
         { $addToSet: { favorites: postId } },
@@ -226,7 +229,8 @@ module.exports = {
         { $inc: { likes: -1 } },
         { new: true }
       );
-      // find user, remove id of post from its favorites array (whitch will be populate as posts)
+      // find user, remove id of post from its favorites array
+      // (whitch will be populate as posts)
       const user = await User.findOneAndUpdate(
         { username },
         { $pull: { favorites: postId } },

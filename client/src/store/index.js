@@ -167,7 +167,13 @@ export default new Vuex.Store({
     updateUserPost: ({ state, commit }, payload) => {
       apolloClient.mutate({
         mutation: UPDATE_USER_POST,
-        variables: payload
+        variables: payload,
+        refetchQueries: [{
+          query: GET_USER_POSTS,
+          variables: {
+            userId: state.user._id
+          }
+        }]
       }).then(({ data }) => {
         const index = state.userPosts.findIndex(
           post => post._id === data.updateUserPost._id
@@ -191,14 +197,12 @@ export default new Vuex.Store({
               pageNum: 1,
               pageSize: 4
             }
-          },
-          {
+          },{
             query: GET_USER_POSTS,
             variables: {
               userId: state.user._id
             }
-          },
-          {
+          },{
             query: GET_POSTS
           }
         ]
