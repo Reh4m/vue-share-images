@@ -8,7 +8,6 @@ type User {
   email: String!
   password: String!
   avatar: String
-  banner: String
   joinDate: Date
   favorites: [Post]
 }
@@ -85,7 +84,6 @@ type Mutation {
     categories: [String]!,
     description: String!
   ): Post!
-  updateUserBanner(userId: ID!, banner: String!): User!
   deleteUserPost(postId: ID!): Post!
   likePost(postId: ID!, username: String!): likesFaves!
   unlikePost(postId: ID!, username: String!): likesFaves!

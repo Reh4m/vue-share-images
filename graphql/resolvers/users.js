@@ -34,19 +34,7 @@ module.exports = {
     },
   },
   Mutation: {
-    updateUserBanner: async (_, { userId, banner }, { User }) => {
-      const user = await User.findOneAndUpdate(
-        { _id: userId },
-        { 
-          $set: {
-            banner
-          }
-        },
-        { new: true }
-      );
-      return user
-    },
-      signinUser: async (_, { username, password }, { User }) => {
+    signinUser: async (_, { username, password }, { User }) => {
       const user = await User.findOne({ username });
       if (!user) throw new Error("User not found");
 

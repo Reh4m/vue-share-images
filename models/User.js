@@ -26,9 +26,6 @@ const UserSchema = new mongoose.Schema({
   avatar: {
     type: String
   },
-  banner: {
-    type: String
-  },
   joinDate: {
     type: Date,
     default: Date.now
@@ -42,20 +39,6 @@ const UserSchema = new mongoose.Schema({
 
 // Create and add avatars to user
 UserSchema.pre('save', function(next) {
-  const imagesArray = [
-    'WOiYafS',
-    'km3nnnz',
-    'gPkf0an',
-    'WqylbTC',
-    'apkdoXL',
-    'TcVXsAe',
-    'lMjVcfQ',
-    'opI4dRv',
-    'lOJzBOm',
-    'jRskhGE'
-  ];
-  const num = Math.floor(Math.random() * 10);
-  this.banner = `https://imgur.com/${imagesArray[num]}.jpg`
   this.avatar = `http://gravatar.com/avatar/${md5(this.username)}?d=identicon`;
   next();
 });

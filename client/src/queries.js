@@ -83,7 +83,6 @@ export const GET_CURRENT_USER = gql`
       email
       password
       avatar
-      banner
       joinDate
       favorites {
         _id
@@ -103,7 +102,6 @@ export const GET_USER = gql`
       name
       email
       avatar
-      banner
       joinDate
       favorites {
         _id
