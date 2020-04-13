@@ -170,7 +170,7 @@
                       <span class="font-weight-bold">
                         <router-link
                           :class="
-                            checkIfDownMessage(message)
+                            checkIfOwnMessage(message)
                               ? 'indigo--text'
                               : 'primary--text'
                           "
@@ -188,7 +188,7 @@
                     </v-list-item-subtitle>
                   </v-list-item-content>
 
-                  <v-list-item-action v-if="checkIfDownMessage(message)">
+                  <v-list-item-action v-if="checkIfOwnMessage(message)">
                     <v-menu left transition="scroll-y-transition">
                       <template v-slot:activator="{ on }">
                         <v-btn icon color="primary" v-on="on">
@@ -438,7 +438,7 @@ export default {
         this.imageDialog = !this.imageDialog;
       }
     },
-    checkIfDownMessage(message) {
+    checkIfOwnMessage(message) {
       return this.user && this.user._id === message.messageUser._id;
     }
   },

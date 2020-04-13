@@ -5,9 +5,9 @@ const path = require('path');
 const jwt = require('jsonwebtoken');
 
 // import typedefs and resolvers
-const filePath = path.join(__dirname, 'typeDefs.gql');
+const filePath = path.join(__dirname, 'graphql/typeDefs.gql');
 const typeDefs = fs.readFileSync(filePath, 'utf-8');
-const resolvers = require('./resolvers');
+const resolvers = require('./graphql/resolvers');
 
 // import enviromefrom nt variables and mongoose models
 require('dotenv').config({ path: 'variables.env' });

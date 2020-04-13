@@ -75,11 +75,6 @@ export default {
       },
     }
   },
-  watch: {
-    loading() {
-      if ($apollo.queries.getUser.loading) console.log('loading')
-    }
-  },
   methods: {
     formatDate(date) {
       return moment(new Date(date)).format("ll");
