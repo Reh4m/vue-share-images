@@ -1,14 +1,30 @@
+
+const handleSortPostsBy = orderBy => {
+  let sortBy;
+  const prop = orderBy.includes('desc') ? 'desc' : 'asc'
+  switch (prop) {
+    case 'desc':
+      sortBy = orderBy.replace('_desc', '');
+      break;
+    case 'asc':
+      sortBy = orderBy.replace('_asc', '');
+      break;
+  }
+  return {
+    sortBy, prop
+  }
+};
+
 module.exports = {
   Query: {
-    getPosts: async (_, { sortBy }, { Post }) => {
-      console.log('sortBy: ', sortBy);
+    getPosts: async (_, args, { Post }) => {
       const posts = await Post.find({})
-        .sort({ createdDate: "desc" })
+        .sort({ createdDate: 'desc' })
         .populate({
           path: "createdBy",
           model: "User"
         })
-        // .limit(5);
+        .limit(5)
       return posts;
     },
     getUserPosts: async (_, { userId }, { Post }) => {
@@ -18,11 +34,14 @@ module.exports = {
       .sort({ createdDate: "desc" });
       return posts;
     },
-    infiniteScrollPosts: async (_, { pageNum, pageSize }, { Post }) => {
+    infiniteScrollPosts: async (_, { pageNum, pageSize, orderBy }, { Post }) => {
+      // get sort value by the user
+      const sortPostsBy = handleSortPostsBy(orderBy);
       let posts;
       if (pageNum === 1) {
         posts = await Post.find({})
-          .sort({ createdDate: "desc" })
+          // dynamic posts sorting by different values
+        .sort({ [sortPostsBy.sortBy]: sortPostsBy.prop })
           .populate({
             path: "createdBy",
             model: "User"
@@ -33,7 +52,7 @@ module.exports = {
         // figure out how many documents to skip
         const skips = pageSize * (pageNum - 1);
         posts = await Post.find({})
-          .sort({ createdDate: "desc" })
+          .sort({ [sortPostsBy.sortBy]: sortPostsBy.prop })
           .populate({
             path: "createdBy",
             model: "User"
@@ -57,11 +76,14 @@ module.exports = {
         throw new Error('Post not found.');
       }
     },
-    getPostsByTag: async (_, { tag }, { Post }) => {
+    getPostsByTag: async (_, { tag, orderBy }, { Post }) => {
+      // get sort value by the user
+      const sortPostsBy = handleSortPostsBy(orderBy);
       const posts = await Post.find({
         categories: tag
       })
-        .sort({ createdDate: "desc" })
+        // dynamic posts sorting by different values
+        .sort({ [sortPostsBy.sortBy]: sortPostsBy.prop })
         .populate({
           path: "createdBy",
           model: "User"

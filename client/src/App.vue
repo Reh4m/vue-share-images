@@ -1,12 +1,29 @@
 <template>
   <v-app>
-    <v-content class="grey lighten-2">
+    <v-content v-scroll="onScroll" class="grey lighten-2">
 
       <Navbar></Navbar>
 
       <transition name="fade">
         <app-view></app-view>
       </transition>
+
+      <!-- page up button -->
+      <v-fab-transition>
+        <v-btn
+          color="info"
+          dark
+          class="elevation-5"
+          fab
+          right
+          fixed
+          bottom
+          @click="goToPageTop"
+          v-show="pageUpButton"
+        >
+          <v-icon>mdi-navigation</v-icon>
+        </v-btn>
+      </v-fab-transition>
 
       <!-- Auth Snackbar -->
       <v-snackbar
@@ -35,7 +52,6 @@
 </template>
 
 <script>
-
 import Navbar from './components/Navbar';
 import {mapGetters, mapActions} from 'vuex'
 
@@ -46,7 +62,10 @@ export default {
   },
   data: () => ({
     authSnackbar: false,
-    authErrorSnackbar: false
+    authErrorSnackbar: false,
+    isPageBottom: false,
+    amountScrolled: 0,
+    pageUpButton: false,
   }),
   computed: {
     ...mapGetters(['authError','user'])
@@ -65,6 +84,26 @@ export default {
       }
     }
   },
+  methods: {
+    onScroll() {
+      this.checkIfPageBottom();
+      this.showPageUpButton();
+    },
+    goToPageTop() {
+      window.scroll({ top: 0, behavior: "smooth" });
+    },
+    showPageUpButton() {
+      this.pageUpButton = this.amountScrolled > 250;
+    },
+    checkIfPageBottom() {
+      const browserHeight = document.documentElement.clientHeight;
+      const pageHeight = document.documentElement.scrollHeight;
+      this.amountScrolled = window.scrollY;
+      const scrolledToBottom =
+        browserHeight + this.amountScrolled >= pageHeight;
+      this.isPageBottom = scrolledToBottom;
+    }
+  }
 };
 </script>
 
@@ -74,11 +113,12 @@ export default {
     border-style: none !important;
     border-width: thin 0 0;
   }
-  
-  a{
+
+  a {
     text-decoration: none;
   }
 
+  /* router transition */
   .fade-enter-active,
   .fade-leave-active {
     transition-property: opacity;

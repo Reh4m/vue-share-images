@@ -37,9 +37,9 @@ type PostsPage {
   hasMore: Boolean
 }
 
-enum SortPostsOrderBy {
-  createdAt_asc
-  createdAt_desc
+enum PostsOrderByInput {
+  createdDate_asc
+  createdDate_desc
   title_asc
   title_desc
   likes_asc
@@ -55,12 +55,16 @@ type likesFaves {
 type Query {
   getCurrentUser: User
   getUser(userId: ID!): User!
-  getPosts(sortBy: SortPostsOrderBy): [Post]
+  getPosts: [Post]
   getUserPosts(userId: ID!): [Post]
   getPost(postId: ID!): Post!
-  getPostsByTag(tag: String!): [Post]
+  getPostsByTag(tag: String!, orderBy: PostsOrderByInput): [Post]
   searchPosts(searchTerm: String): [Post]
-  infiniteScrollPosts(pageNum: Int!, pageSize: Int!): PostsPage
+  infiniteScrollPosts(
+    pageNum: Int!, 
+    pageSize: Int!, 
+    orderBy: PostsOrderByInput
+  ): PostsPage
 }
 
 type Token {

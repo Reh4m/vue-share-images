@@ -44,8 +44,8 @@ export const GET_POST = gql`
 `;
 
 export const GET_POSTS_BY_TAG = gql`
-  query($tag: String!) {
-    getPostsByTag(tag: $tag) {
+  query($tag: String!, $orderBy: PostsOrderByInput) {
+    getPostsByTag(tag: $tag, orderBy: $orderBy) {
       _id
       ...PostFields
       createdDate
@@ -129,8 +129,12 @@ export const GET_USER_POSTS = gql`
 `;
 
 export const INFINITE_SCROLL_POSTS = gql`
-  query($pageNum: Int!, $pageSize: Int!) {
-    infiniteScrollPosts(pageNum: $pageNum, pageSize: $pageSize) {
+  query($pageNum: Int!, $pageSize: Int!, $orderBy: PostsOrderByInput) {
+    infiniteScrollPosts(
+      pageNum: $pageNum,
+      pageSize: $pageSize,
+      orderBy: $orderBy
+    ) {
       hasMore
       posts {
         _id

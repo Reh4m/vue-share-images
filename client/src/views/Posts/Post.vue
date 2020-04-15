@@ -64,7 +64,7 @@
           </v-dialog>
 
           <!-- description -->
-          <v-card-title>
+          <v-card-title class="primary--text">
             {{ getPost.title }}
           </v-card-title>
           <v-card-text>
@@ -125,11 +125,8 @@
       <!-- messages -->
       <v-col cols="12">
         <v-card flat :loading="loadingDeleteMessage">
-          <v-subheader class="caption darklighten--text font-weight-bold">
-            {{ getPost.messages.length }}
-            {{ getPost.messages.length === 1 ? "Message" : "Messages" }}
-          </v-subheader>
           <v-container>
+            <!-- message input -->
             <v-form
               v-if="user"
               v-model="isFormValid"
@@ -137,27 +134,36 @@
               ref="form"
               @submit.prevent="handleAddPostMessage"
             >
-              <!-- message input -->
               <v-text-field
                 v-model="messageBody"
+                hide-details
                 filled
                 placeholder="Add message"
                 :append-icon="messageBody && 'mdi-send'"
                 @click:append="handleAddPostMessage"
-                :disabled="loadingMessage"
                 :rules="messageRules"
                 :loading="loadingMessage"
               >
-                <template v-slot:prepend>
-                  <v-avatar size="25">
-                    <v-img :src="user.avatar"></v-img>
-                  </v-avatar>
-                </template>
               </v-text-field>
             </v-form>
-
+            <v-banner v-else single-line>
+              Sign in to leave a message
+              <template v-slot:actions>
+                <v-btn
+                  text
+                  color="#ac5380"
+                  to="/signin"
+                >
+                  Sign in
+                </v-btn>
+              </template>
+            </v-banner>
             <!-- messages -->
             <v-list v-if="getPost.messages.length" three-line>
+              <v-subheader class="caption darklighten--text font-weight-bold">
+                {{ getPost.messages.length }}
+                {{ getPost.messages.length === 1 ? "Message" : "Messages" }}
+              </v-subheader>
               <template v-for="(message, index) in getPost.messages">
                 <v-divider v-if="index != 0" :key="message._id"/>
                 <v-list-item>
@@ -246,7 +252,8 @@ export default {
     messageError: '',
     signinRequired: false,
     messageRules: [
-      messageBody => messageBody.length < 200 || 'Message must be less than 200 characters'
+      messageBody => 
+        messageBody.length < 10 || 'Message must be less than 200 characters'
     ],
     loadingLike: false,
     loadingMessage: false,
@@ -276,7 +283,7 @@ export default {
       return moment(time).fromNow();
     },
     formatCreatedDate(date) {
-      return moment(new Date(date)).format('ll');
+      return moment(new Date(date)).format('LLL');
     },
     goToUser(userId) {
       this.$router.push(`/profile/${userId}`);
@@ -319,7 +326,10 @@ export default {
         }
       }).then(({ data }) => {
         this.loadingLike = false;
-        const updatedUser = { ...this.user, favorites: data.likePost.favorites };
+        const updatedUser = { 
+          ...this.user, favorites: 
+          data.likePost.favorites 
+        };
         this.$store.commit('setUser', updatedUser);
       }).catch(err => {
         this.loadingLike = false;
@@ -349,7 +359,10 @@ export default {
         }
       }).then(({ data }) => {
         this.loadingLike = false;
-        const updatedUser = { ...this.user, favorites: data.unlikePost.favorites };
+        const updatedUser = { 
+          ...this.user, 
+          favorites: data.unlikePost.favorites 
+        };
         this.$store.commit('setUser', updatedUser);
       }).catch(err => {
         this.loadingLike = false;
@@ -425,7 +438,8 @@ export default {
       });
     },
     handleDeleteUserMessage(messageId, index) {
-      const deleteMessage = window.confirm('Are you sure want to delete this message?');
+      const deleteMessage = 
+        window.confirm('Are you sure want to delete this message?');
       if (deleteMessage) {
         this.deleteUserMessage(messageId, index);
       }

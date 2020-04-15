@@ -1,14 +1,13 @@
 <template>
   <v-container fluid>
-    <v-row align="center" justify="center">
+    <v-row justify="center">
       <v-col cols="12" sm="8" md="4">
-        <v-card flat color="#8b4367" dark :disabled="loading">
+        <v-card flat dark color="#8b4367" :disabled="loading">
           <v-toolbar dark color="#424242">
             <v-toolbar-title>
               Welcome back
             </v-toolbar-title>
           </v-toolbar>
-
           <v-card-text>
             <v-form
               v-model="isFormValid"
@@ -51,9 +50,8 @@
               </v-btn>
             </v-form>
           </v-card-text>
-
           <v-card-actions class="signinTheme">
-            <v-btn block text class="text-capitalize" link to="/signup">
+            <v-btn block text class="text-capitalize" to="/signup">
               Don't have an account? Sign up
             </v-btn>
           </v-card-actions>

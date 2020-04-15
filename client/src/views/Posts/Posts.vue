@@ -1,22 +1,5 @@
 <template lang="html">
-  <v-container v-scroll="onScroll">
-    <!-- page up button -->
-    <v-fab-transition>
-      <v-btn
-        color="info"
-        dark
-        class="elevation-5"
-        fab
-        right
-        fixed
-        bottom
-        @click="goToPageTop"
-        v-show="pageUpButton"
-      >
-        <v-icon>mdi-navigation</v-icon>
-      </v-btn>
-    </v-fab-transition>
-
+  <v-container>
     <v-row v-if="infiniteScrollPosts">
       <!-- layout buttons -->
       <v-col cols="12">
@@ -52,7 +35,7 @@
               </v-btn>
             </template>
             <v-list>
-              <v-list-item-group color="#FF6B6B" mandatory v-model="sortBy">
+              <v-list-item-group color="#FF6B6B" mandatory v-model="orderBy">
                 <v-list-item
                   v-for="(item, index) in sortItems"
                   :key="index"
@@ -77,58 +60,60 @@
         cols="12"
         :sm="mozaicLayout && index % 3 === 0 ? 12 : 6"
       >
-        <v-card hover flat>
-          <v-img
-            class="white--text"
-            v-ripple="{ center: false }"
-            height="30vh"
-            @click.native="goToId('posts', post._id)"
-            :src="post.imageUrl"
-          ></v-img>
+        <v-skeleton-loader type="card" :loading="refetchPosts">
+          <v-card hover flat>
+            <v-img
+              class="white--text"
+              v-ripple="{ center: false }"
+              height="30vh"
+              @click.native="goToId('posts', post._id)"
+              :src="post.imageUrl"
+            ></v-img>
 
-          <v-list-group :value="false" :ripple="false" mandatory>
-            <template v-slot:activator>
-              <v-list-item-content class="my-2">
-                <v-list-item-title>
-                  <span class="caption darklighten--text font-weight-bold">
-                    {{ post.title }}
-                  </span>
-                </v-list-item-title>
-                <v-list-item-subtitle>
-                  <span class="caption greylighten--text font-weight-bold">
-                    {{ post.likes }} Likes • {{ post.messages.length }} Comments
-                  </span>
-                </v-list-item-subtitle>
-              </v-list-item-content>
-            </template>
+            <v-list-group :value="false" :ripple="false" mandatory>
+              <template v-slot:activator>
+                <v-list-item-content class="my-2">
+                  <v-list-item-title>
+                    <span class="caption darklighten--text font-weight-bold">
+                      {{ post.title }}
+                    </span>
+                  </v-list-item-title>
+                  <v-list-item-subtitle>
+                    <span class="caption greylighten--text font-weight-bold">
+                      {{ post.likes }} Likes • {{ post.messages.length }} Comments
+                    </span>
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </template>
 
-            <v-list-item
-              class="grey lighten-5"
-              @click="goToId('profile', post.createdBy._id)"
-            >
-              <v-list-item-avatar size="30">
-                <img :src="post.createdBy.avatar" />
-              </v-list-item-avatar>
-              <v-list-item-content>
-                <v-list-item-title>
-                  <span
-                    class="
-                    caption text-capitalize
-                    darklighten--text font-weight-bold
-                  "
-                  >
-                    By {{ post.createdBy.name }}
-                  </span>
-                </v-list-item-title>
-                <v-list-item-subtitle>
-                  <span class="caption font-weight-bold">
-                    Added {{ formatCreatedDate(post.createdDate) }}
-                  </span>
-                </v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list-group>
-        </v-card>
+              <v-list-item
+                class="grey lighten-5"
+                @click="goToId('profile', post.createdBy._id)"
+              >
+                <v-list-item-avatar size="30">
+                  <img :src="post.createdBy.avatar" />
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title>
+                    <span
+                      class="
+                      caption text-capitalize
+                      darklighten--text font-weight-bold
+                    "
+                    >
+                      By {{ post.createdBy.name }}
+                    </span>
+                  </v-list-item-title>
+                  <v-list-item-subtitle>
+                    <span class="caption font-weight-bold">
+                      Added {{ formatCreatedDate(post.createdDate) }}
+                    </span>
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-group>
+          </v-card>
+        </v-skeleton-loader>
       </v-col>
     </v-row>
 
@@ -157,26 +142,25 @@ export default {
   name: "posts",
   data: () => ({
     pageNum: 1,
-    amountScrolled: 0,
-    isPageBottom: false,
-    pageUpButton: false,
     mozaicLayout: false,
     sortItems: [
       { title: "Newest (default)", sortBy: 'createdDate', prop: 'desc'},
       { title: "Oldest", sortBy: 'createdDate', prop:  'asc' },
       { title: "Most likes", sortBy: 'likes', prop: 'desc' },
       { title: "Least likes", sortBy: 'likes', prop: 'asc' },
-      { title: "Alphabetical (A-Z)", sortBy: 'title', prop: 'desc'  },
-      { title: "Alphabetical (Z-A)", sortBy: 'title', prop: 'asc'  }
+      { title: "Alphabetical (A-Z)", sortBy: 'title', prop: 'asc' },
+      { title: "Alphabetical (Z-A)", sortBy: 'title', prop: 'desc' }
     ],
-    sortBy: 0
+    orderBy: 0,
+    refetchPosts: false
   }),
   apollo: {
     infiniteScrollPosts: {
       query: INFINITE_SCROLL_POSTS,
       variables: {
         pageNum: 1,
-        pageSize
+        pageSize,
+        orderBy: 'createdDate_desc'
       }
     }
   },
@@ -195,16 +179,19 @@ export default {
   },
   methods: {
     // sorting posts list by value
-    sortPostsBy(prop, value) {
-      this.infiniteScrollPosts.posts.sort((a, b) => {
-        switch (value) {
-          case 'desc':
-            return a[prop] > b[prop] ? -1 : 1;
-            break;
-          case 'asc':
-            return a[prop] < b[prop] ? -1 : 1;
-            break;
-        };
+    sortPostsBy(value, prop) {
+      this.refetchPosts = true;
+      this.$apollo.queries.infiniteScrollPosts.refetch({
+        pageNum: 1,
+        pageSize,
+        orderBy: `${value}_${prop}`
+      })
+      .then(data => {
+        this.refetchPosts = false;
+      })
+      .catch(err => {
+        this.refetchPosts = false;
+        console.error(err);
       });
     },
     goToId(route, id) {
@@ -212,24 +199,6 @@ export default {
     },
     formatCreatedDate(date) {
       return moment(date).format('LL');
-    },
-    onScroll() {
-      this.checkIfPageBottom();
-      this.showPageUpButton();
-    },
-    goToPageTop() {
-      window.scroll({ top: 0, behavior: "smooth" });
-    },
-    showPageUpButton() {
-      this.pageUpButton = this.amountScrolled > 250;
-    },
-    checkIfPageBottom() {
-      const browserHeight = document.documentElement.clientHeight;
-      const pageHeight = document.documentElement.scrollHeight;
-      this.amountScrolled = window.scrollY;
-      const scrolledToBottom =
-        browserHeight + this.amountScrolled >= pageHeight;
-      this.isPageBottom = scrolledToBottom;
     },
     showMorePosts() {
       this.pageNum += 1;
@@ -255,49 +224,5 @@ export default {
       });
     }
   },
-  beforeDestroy() {
-    // change to default posts list
-    if (this.sortBy !== 0) {
-      this.sortPostsBy('createdDate', 'desc');
-    };
-  },
 };
 </script>
-
-<style lang="css">
-  .down-animation {
-    animation: down 0.5s both;
-  }
-  @-moz-keyframes down {
-    from {
-      transform: rotate(0);
-    }
-    to {
-      transform: rotate(180deg);
-    }
-  }
-  @-webkit-keyframes down {
-    from {
-      transform: rotate(0);
-    }
-    to {
-      transform: rotate(180deg);
-    }
-  }
-  @-o-keyframes down {
-    from {
-      transform: rotate(0);
-    }
-    to {
-      transform: rotate(180deg);
-    }
-  }
-  @keyframes down {
-    from {
-      transform: rotate(0);
-    }
-    to {
-      transform: rotate(180deg);
-    }
-  }
-</style>

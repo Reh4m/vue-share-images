@@ -86,9 +86,8 @@
               </v-btn>
             </v-form>
           </v-card-text>
-
           <v-card-actions class="signupTheme">
-            <v-btn block text class="text-capitalize" link to="/signin">
+            <v-btn block text class="text-capitalize" to="/signin">
               Already have an account? Sign In
             </v-btn>
           </v-card-actions>

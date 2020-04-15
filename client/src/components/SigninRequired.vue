@@ -16,15 +16,19 @@
         </v-card-text>
       </v-container>
       <v-card-actions class="grey lighten-5">
-        <v-spacer></v-spacer>
-        <v-btn text class="mr-4" @click="closeDialog">
+        <v-spacer/>
+        <v-btn text @click="closeDialog">
           Cancel
         </v-btn>
-        <router-link to="/signin">
-          <v-btn dense dark color="#ac5380" @click="closeDialog">
-            Sign in
-          </v-btn>
-        </router-link>
+        <v-btn
+          dark
+          color="#ac5380"
+          depressed
+          to="/signin"
+          @click="closeDialog"
+        >
+          Sign in
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

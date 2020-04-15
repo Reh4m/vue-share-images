@@ -3,7 +3,7 @@
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6">
         <v-card flat class="transparent">
-          <h1 class="darklighten--text text-center">Add Post</h1>
+          <h1 class="darklighten--text text-center">New Post</h1>
           <v-container>
             <v-form v-model="isFormValid" lazy-validation ref="form">
               <!-- image url input -->
@@ -19,7 +19,7 @@
               <!-- image preview -->
               <v-row v-if="imageUrl">
                 <v-col class="text-center">
-                  <img class="elevation-5 responsive" :src="imageUrl" />
+                  <img class=" responsive" :src="imageUrl" />
                 </v-col>
               </v-row>
 
@@ -68,23 +68,26 @@
               </v-combobox>
 
               <!-- submit post -->
-              <v-row justify="center">
+              <v-layout>
+                <v-btn @click="resetForm" outlined>
+                  Reset
+                </v-btn>
+                <v-spacer/>
                 <v-btn
-                  color="#45454d"
-                  class="white--text"
+                  color="primary"
+                  depressed
                   :loading="loading"
                   :disabled="loading || !isFormValid"
                   @click="handleAddPost"
                 >
-                  Submit
+                  Add post
                   <template v-slot:loader>
                     <span class="custom-loader">
                       <v-icon light>mdi-cached</v-icon>
                     </span>
                   </template>
                 </v-btn>
-              </v-row>
-
+              </v-layout>
             </v-form>
           </v-container>
         </v-card>
@@ -116,7 +119,9 @@ export default {
     ],
     titleRules: [
       title => !!title || "Title is required",
-      title => title.length < 30 || "Title must have less than 30 characters"
+      title => 
+        (title && title.length <= 30) || 
+        "Title must have less than 30 characters"
     ],
     imageRules: [
       image => !!image || "Image url is required",
@@ -127,8 +132,9 @@ export default {
     ],
     descriptonRules: [
       desc => !!desc || "Description is required",
-      desc =>
-        desc.length < 200 || "Description must have less than 200 characters"
+      desc => 
+        (desc && desc.length <= 200) || 
+        "Description must have less than 200 characters"
     ]
   }),
   computed: {
@@ -149,6 +155,9 @@ export default {
           creatorId: this.user._id
         });
       }
+    },
+    resetForm() {
+      this.$refs.form.reset()
     }
   },
 };
