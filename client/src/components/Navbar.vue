@@ -4,7 +4,7 @@
     <v-app-bar app dark color="#3a9679">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
 
-      <router-link class="hidden-xs-only" to="/">
+      <router-link class="d-none d-sm-none d-md-flex" to="/">
         <v-btn text large>
           Schooldevs
         </v-btn>
@@ -14,40 +14,16 @@
 
       <!-- search input -->
       <v-text-field
+        class="mr-3"
         v-model="searchTerm"
-        class="ma-3"
-        flat
         filled
         dense
         hide-details
         placeholder="Search"
-        clearable
+        @click="goToSearchPage"
         :append-icon="searchTerm && 'mdi-magnify'"
         @input="handleSearchPosts"
       ></v-text-field>
-
-      <!-- search results card -->
-      <v-card flat tile v-if="searchResults.length" id="search__card">
-        <v-list light>
-          <v-list-item
-            @click="goToSearchResult(result._id)"
-            v-for="result in searchResults"
-            :key="result._id"
-          >
-            <v-list-item-subtitle>
-              <span class="text--primary">
-                {{ result.title }}
-              </span>
-              • {{ formatDescription(result.description) }}
-            </v-list-item-subtitle>
-
-            <!-- show icon if result favorited by user -->
-            <v-list-item-action v-if="checkIfUserFavorite(result._id)">
-              <v-icon small color="red">mdi-heart</v-icon>
-            </v-list-item-action>
-          </v-list-item>
-        </v-list>
-      </v-card>
 
       <!-- horizontal navbar items -->
       <v-btn
@@ -152,24 +128,21 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions, mapState } from "vuex";
 
 export default {
   name: "Navbar",
   data: () => ({
     drawer: null,
     badgeAnimated: false,
-    searchTerm: "",
+    searchTerm: ''
   }),
   methods: {
     ...mapActions(["signoutUser"]),
-    goToSearchResult(resultId) {
-      // clear search term
-      this.searchTerm = "";
-      // go to desined result
-      this.$router.push({ path: `/posts/${resultId}` });
-      // clear search result
-      this.$store.commit("clearSearchResults");
+    goToSearchPage() {
+      if (this.$route.path !== '/search' ) {
+        this.$router.push('/search');
+      }
     },
     handleSearchPosts() {
       this.$store.dispatch("searchPosts", {

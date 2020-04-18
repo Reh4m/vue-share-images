@@ -4,7 +4,7 @@
     <query-progress v-show="$apollo.queries.getPost.loading" />
 
     <!-- post -->
-    <v-row v-if="getPost">
+    <v-row v-if="getPost && !$apollo.loading">
       <v-col cols="12">
         <v-card flat>
           <v-list-item two-line>
@@ -72,7 +72,7 @@
           </v-card-text>
 
           <!-- actions -->
-          <v-list-item class="grey lighten-5">
+          <v-list-item class="greylightenfive">
             <v-list-item-title>
               <v-chip-group show-arrows>
                 <v-chip

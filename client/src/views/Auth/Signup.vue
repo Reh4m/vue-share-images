@@ -16,6 +16,7 @@
               ref="form"
               @submit.prevent="handleSignupUser"
             >
+              <!-- user names -->
               <v-row>
                 <v-col cols="6" class="py-0">
                   <v-text-field
@@ -37,6 +38,7 @@
                 </v-col>
               </v-row>
 
+              <!-- email input -->
               <v-text-field
                 filled
                 label="Email"
@@ -45,30 +47,37 @@
                 :rules="emailRules"
               ></v-text-field>
 
-              <v-text-field
-                filled
-                label="Password"
-                :type="show1 ? 'text' : 'password'"
-                :append-icon="show1 ? 'mdi-eye-outline' : 'mdi-eye-off-outline'"
-                @click:append="show1 = !show1"
-                v-model="password"
-                required
-                :rules="passwordRules"
-              ></v-text-field>
-
-              <v-text-field
-                filled
-                label="Confirm password"
-                :type="show2 ? 'text' : 'password'"
-                :append-icon="show2 ? 'mdi-eye-outline' : 'mdi-eye-off-outline'"
-                :rules="[
-                  () => !!passConfirm || 'Confirmation password is required',
-                ]"
-                @click:append="show2 = !show2"
-                v-model="passConfirm"
-                required
-                :messages="passConfirmRules"
-              ></v-text-field>
+              <!-- password input -->
+              <v-row>
+                <v-col cols="6" class="py-0">
+                  <v-text-field
+                    filled
+                    label="Password"
+                    :type="showPassword ? 'text' : 'password'"
+                    v-model="password"
+                    required
+                    :rules="passwordRules"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="6" class="py-0">
+                  <v-text-field
+                    filled
+                    label="Confirm password"
+                    :type="showPassword ? 'text' : 'password'"
+                    :append-outer-icon="
+                      showPassword ? 'mdi-eye-outline' : 'mdi-eye-off-outline'
+                    "
+                    :rules="[
+                      () =>
+                        !!passConfirm || 'Confirmation password is required',
+                    ]"
+                    @click:append-outer="showPassword = !showPassword"
+                    v-model="passConfirm"
+                    required
+                    :messages="passConfirmRules"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
 
               <v-btn
                 block
@@ -86,11 +95,11 @@
               </v-btn>
             </v-form>
           </v-card-text>
-          <v-card-actions class="signupTheme">
-            <v-btn block text class="text-capitalize" to="/signin">
-              Already have an account? Sign In
+          <v-card-text class="signupTheme">
+            <v-btn outlined block text to="/signin">
+              Sign In instead
             </v-btn>
-          </v-card-actions>
+          </v-card-text>
         </v-card>
 
         <!-- form error message -->
@@ -105,7 +114,7 @@
 </template>
 
 <script>
-import { mapActions, mapState, mapGetters } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex';
 
 export default {
   name: 'login',
@@ -115,8 +124,7 @@ export default {
     email: '',
     password: '',
     passConfirm: '',
-    show1: false,
-    show2: false,
+    showPassword: false,
     isFormValid: true,
     usernameRules: [
       username => !!username ||  'Username is required',

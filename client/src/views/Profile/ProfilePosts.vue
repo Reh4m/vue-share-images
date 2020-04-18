@@ -1,12 +1,16 @@
 <template>
   <v-container>
-    <!-- posts created by user -->
     <template v-if="!getUserPosts.length">
       <v-row>
         <v-col class="text-center">
-          <span class="primary--text">
-            This user has not shared anything
+          <span class="title primary--text">
+            No posts here
           </span>
+          <p class="font-weight-light">
+            This user has not shared anything
+            <v-spacer/>
+            Check back soon!
+          </p>
         </v-col>
       </v-row>
     </template>

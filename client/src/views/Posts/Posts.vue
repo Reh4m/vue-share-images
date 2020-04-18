@@ -1,5 +1,5 @@
 <template lang="html">
-  <v-container>
+  <v-container v-scroll="onScroll">
     <v-row v-if="infiniteScrollPosts">
       <!-- layout buttons -->
       <v-col cols="12">
@@ -63,10 +63,9 @@
         <v-skeleton-loader type="card" :loading="refetchPosts">
           <v-card hover flat>
             <v-img
-              class="white--text"
               v-ripple="{ center: false }"
               height="30vh"
-              @click.native="goToId('posts', post._id)"
+              @click="goToId('posts', post._id)"
               :src="post.imageUrl"
             ></v-img>
 
@@ -87,7 +86,7 @@
               </template>
 
               <v-list-item
-                class="grey lighten-5"
+                class="greylightenfive"
                 @click="goToId('profile', post.createdBy._id)"
               >
                 <v-list-item-avatar size="30">
@@ -122,7 +121,7 @@
 
     <!-- text if no remaining posts -->
     <v-row v-if="!$apollo.loading && !showMoreEnabled">
-      <v-col class="text-center mt-5 mb-5">
+      <v-col class="text-center my-5">
         <span class="error--text">
           You’ve reached the end of the list
         </span>
@@ -142,6 +141,7 @@ export default {
   name: "posts",
   data: () => ({
     pageNum: 1,
+    isPageBottom: false,
     mozaicLayout: false,
     sortItems: [
       { title: "Newest (default)", sortBy: 'createdDate', prop: 'desc'},
@@ -199,6 +199,17 @@ export default {
     },
     formatCreatedDate(date) {
       return moment(date).format('LL');
+    },
+    onScroll() {
+      this.checkIfPageBottom();
+    },
+    checkIfPageBottom() {
+      const browserHeight = document.documentElement.clientHeight;
+      const pageHeight = document.documentElement.scrollHeight;
+      this.amountScrolled = window.scrollY;
+      const scrolledToBottom =
+        browserHeight + this.amountScrolled >= pageHeight;
+      this.isPageBottom = scrolledToBottom;
     },
     showMorePosts() {
       this.pageNum += 1;

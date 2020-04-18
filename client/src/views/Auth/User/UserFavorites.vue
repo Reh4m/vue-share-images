@@ -3,9 +3,12 @@
     <template v-if="!userFavorites.length">
       <v-row>
         <v-col class="text-center">
-          <span class="darklighten--text">
-            You have no favorited posts currently.
+          <span class="title primary--text">
+            Nothing here
           </span>
+          <p class="font-weight-light">
+            You have no favorited posts currently.
+          </p>
         </v-col>
       </v-row>
     </template>

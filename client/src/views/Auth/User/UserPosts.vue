@@ -6,12 +6,12 @@
     <template v-if="!userPosts.length && !loading">
       <v-row>
         <v-col class="text-center">
-          <span class="darklighten--text">
-            You have no posts currently.
-            <router-link class="info--text" to="/post/add">
-              Go and add some!
-            </router-link>
-          </span>
+          <p class="font-weight-light">
+            You haven’t uploaded any post yet
+          </p>
+          <v-btn depressed to="/post/add" color="info">
+            Add new post
+          </v-btn>
         </v-col>
       </v-row>
     </template>
@@ -72,7 +72,7 @@
       </v-row>
 
       <!-- edit post dialog -->
-      <v-dialog v-model="editPostDialog" fullscreen>
+      <v-dialog v-model="editPostDialog">
         <v-card>
           <v-toolbar dark color="primary">
             <v-btn icon dark @click="editPostDialog = false">

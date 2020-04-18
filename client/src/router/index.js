@@ -57,6 +57,10 @@ const routes = [
     component: () => import('../views/Posts/Post.vue'),
     props: true
   },{
+    path: '/search',
+    name: 'searchPostsResults',
+    component: () => import('../views/SearchPostsResults.vue')
+  },{
     path: '/tags/:tag',
     name: 'tags',
     component: () => import('../views/Tags.vue'),

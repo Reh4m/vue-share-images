@@ -50,11 +50,11 @@
               </v-btn>
             </v-form>
           </v-card-text>
-          <v-card-actions class="signinTheme">
-            <v-btn block text class="text-capitalize" to="/signup">
-              Don't have an account? Sign up
+          <v-card-text class="signinTheme">
+            <v-btn outlined block text to="/signup">
+              Create account
             </v-btn>
-          </v-card-actions>
+          </v-card-text>
         </v-card>
 
         <!-- form error message -->
@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import { mapActions, mapState, mapGetters } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex';
 
 export default {
   name: 'login',

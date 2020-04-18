@@ -68,6 +68,7 @@ export const SEARCH_POSTS = gql`
       title
       description
       imageUrl
+      createdDate
       likes
     }
   }

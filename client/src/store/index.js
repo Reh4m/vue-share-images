@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import router from '../router'
-import { defaultClient as apolloClient} from '../main';
+import { defaultClient as apolloClient } from '../main';
 import {
   GET_CURRENT_USER,
   GET_POSTS,
@@ -58,12 +58,17 @@ export default new Vuex.Store({
   },
   actions: {
     searchPosts: ({ commit }, payload) => {
+      commit('setLoading', true);
       apolloClient.query({
         query: SEARCH_POSTS,
         variables: payload
       }).then(({ data }) => {
+        commit('setLoading', false);
         commit('setSearchResults', data.searchPosts);
-      }).catch(err => console.error(err));
+      }).catch(err => {
+        commit('setLoading', false);
+        console.error(err)
+      });
     },
     getCurrentUser: ({ commit }) => {
       commit('setLoading', true);
@@ -269,7 +274,7 @@ export default new Vuex.Store({
       // end session
       await apolloClient.resetStore();
       // redirect home - kick users out of private pages
-      router.push('/').catch(err => {});
+      router.go();
     }
   },
   getters: {

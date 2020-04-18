@@ -93,7 +93,7 @@ module.exports = {
     },
     searchPosts: async (_, { searchTerm }, { Post }) => {
       const searchResults = await Post.find(
-        // perform text search for search value of 'searchTerm
+        // perform text search for search value of 'searchTerm'
         { $text: { $search: searchTerm } },
         // assign 'searchTerm' a text score to provide best match
         { score: { $meta: "textScore" } }

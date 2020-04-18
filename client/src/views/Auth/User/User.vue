@@ -23,7 +23,7 @@
           </v-list-item-content>
         </v-list-item>
       </v-container>
-      <v-card-actions class="pa-0 grey lighten-5">
+      <v-card-actions class="pa-0 greylightenfive">
         <v-tabs v-model="activeTab" background-color="transparent" centered>
           <v-tab v-for="item in navItems" :key="item.title" :to="item.link">
             {{ item.title }} {{ item.count }}

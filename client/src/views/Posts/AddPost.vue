@@ -69,7 +69,7 @@
 
               <!-- submit post -->
               <v-layout>
-                <v-btn @click="resetForm" outlined>
+                <v-btn outlined color="error" @click="resetForm">
                   Reset
                 </v-btn>
                 <v-spacer/>

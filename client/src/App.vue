@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-content v-scroll="onScroll" class="grey lighten-2">
+    <v-content v-scroll="onScroll" class="greylightentwo">
 
       <Navbar></Navbar>
 
@@ -11,7 +11,7 @@
       <!-- page up button -->
       <v-fab-transition>
         <v-btn
-          color="info"
+          color=info
           dark
           class="elevation-5"
           fab

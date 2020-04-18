@@ -15,7 +15,7 @@
           sign in.
         </v-card-text>
       </v-container>
-      <v-card-actions class="grey lighten-5">
+      <v-card-actions class="greylightenfive">
         <v-spacer/>
         <v-btn text @click="closeDialog">
           Cancel
@@ -23,7 +23,6 @@
         <v-btn
           dark
           color="#ac5380"
-          depressed
           to="/signin"
           @click="closeDialog"
         >
