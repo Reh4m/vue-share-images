@@ -58,7 +58,7 @@ import {mapGetters, mapActions} from 'vuex'
 export default {
   name: 'App',
   components: {
-    Navbar,
+    Navbar
   },
   data: () => ({
     authSnackbar: false,

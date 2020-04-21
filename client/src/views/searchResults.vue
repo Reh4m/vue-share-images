@@ -20,7 +20,7 @@
     <template v-else>
       <v-row>
         <v-col
-          v-for="(result, index) in searchResults"
+          v-for="result in searchResults"
           :key="result._id"
           cols="12"
           sm="6"
@@ -68,7 +68,7 @@ import { mapGetters } from "vuex";
 const pageSize = 6;
 
 export default {
-  name: 'searchPostsResults',
+  name: 'searchResults',
   computed: {
     ...mapGetters(["user", "searchResults", "loading", "userFavorites"]),
   },
@@ -85,9 +85,7 @@ export default {
         this.userFavorites.some(fave => fave._id === resultId)
       );
     },
-    getTimeFromNow(time) {
-      return moment(time).format('LL');
-    }
+    getTimeFromNow: time => moment(time).format('LL'),
   }
 }
 </script>

@@ -51,7 +51,7 @@
                 bottom
                 absolute
                 fab
-                @click="handleDeleteUserPost(post)"
+                @click="handleDeleteUserPost(post._id)"
               >
                 <v-icon>mdi-delete-outline</v-icon>
               </v-btn>
@@ -64,7 +64,8 @@
             </v-card-title>
             <v-card-subtitle>
               <span class="caption greylighten--text font-weight-bold">
-                {{ post.likes }} Likes • {{ formatDate(post.createdDate) }}
+                {{ post.likes }} Likes •
+                {{ post.messagesCount }} Messages
               </span>
             </v-card-subtitle>
           </v-card>
@@ -72,7 +73,7 @@
       </v-row>
 
       <!-- edit post dialog -->
-      <v-dialog v-model="editPostDialog">
+      <v-dialog v-model="editPostDialog" fullscreen>
         <v-card>
           <v-toolbar dark color="primary">
             <v-btn icon dark @click="editPostDialog = false">
@@ -219,9 +220,7 @@ export default {
     this.handleGetUserPost();
   },
   methods: {
-    formatDate(date) {
-      return moment(date).format("LLL");
-    },
+    formatDate: date => moment(date).format("LLL"),
     goToPost(postId) {
       this.$router.push(`/posts/${postId}`)
     },
@@ -248,14 +247,13 @@ export default {
         this.editPostDialog = false;
       }
     },
-    handleDeleteUserPost(post) {
-      this.loadPost(post, false);
-      const deletePost = window.confirm('Are you sure want to delete this post?');
+    handleDeleteUserPost(postId) {
+      const deletePost = window.confirm(
+        'Are you sure want to delete this post?'
+      );
       if (deletePost) {
-        this.$store.dispatch('deleteUserPost', {
-          postId: this.postId
-        })
-      }
+        this.$store.dispatch('deleteUserPost', { postId })
+      };
     },
     loadPost(
       { _id, title, imageUrl, categories, description },

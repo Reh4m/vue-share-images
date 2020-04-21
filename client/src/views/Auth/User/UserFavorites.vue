@@ -32,9 +32,14 @@
             <v-img height="30vh" :src="favorite.imageUrl"></v-img>
             <v-card-title>
               <span class="caption darklighten--text font-weight-bold">
-                {{ favorite.title }} • {{ formatDate(favorite.createdDate) }}
+                {{ favorite.title }}
               </span>
             </v-card-title>
+            <v-card-subtitle>
+              <span class="caption greylighten--text font-weight-bold">
+                Added {{ formatDate(favorite.createdDate) }}
+              </span>
+            </v-card-subtitle>
           </v-card>
         </v-col>
       </v-row>
@@ -52,9 +57,7 @@ export default {
     ...mapGetters(["user", "userPosts", "userFavorites"])
   },
   methods: {
-    formatDate(date) {
-      return moment(date).format("LL");
-    },
+    formatDate: date => moment(date).format("LL"),
     goToPost(postId) {
       this.$router.push(`/posts/${postId}`)
     }

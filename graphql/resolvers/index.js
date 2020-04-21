@@ -4,6 +4,9 @@ const postsMessagesResolvers = require('./messages');
 const scalarDate = require('../scalarDate');
 
 module.exports = {
+  Post: {
+    messagesCount: parent => parent.messages.length
+  },
   Query: {
     ...usersResolvers.Query,
     ...postsResolvers.Query

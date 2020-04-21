@@ -34,7 +34,7 @@
             </v-card-title>
             <v-card-subtitle>
               <span class="caption greylighten--text font-weight-bold">
-                {{ post.likes }} Likes • {{ post.messages.length }} Messages
+                {{ post.likes }} Likes • {{ post.messagesCount }} Messages
               </span>
             </v-card-subtitle>
           </v-card>
@@ -61,9 +61,7 @@ export default {
     }
   },
   methods: {
-    formatDate(date) {
-      return moment(new Date(date)).format("ll");
-    },
+    formatDate: date => moment(date).format("LL"),
     goToPost(postId) {
       this.$router.push(`/posts/${postId}`)
     },

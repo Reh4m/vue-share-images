@@ -19,7 +19,7 @@
               <!-- image preview -->
               <v-row v-if="imageUrl">
                 <v-col class="text-center">
-                  <img class=" responsive" :src="imageUrl" />
+                  <img class="elevation-5 responsive" :src="imageUrl" />
                 </v-col>
               </v-row>
 

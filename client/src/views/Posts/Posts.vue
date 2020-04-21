@@ -79,7 +79,7 @@
                   </v-list-item-title>
                   <v-list-item-subtitle>
                     <span class="caption greylighten--text font-weight-bold">
-                      {{ post.likes }} Likes • {{ post.messages.length }} Comments
+                      {{ post.likes }} Likes • {{ post.messagesCount }} Comments
                     </span>
                   </v-list-item-subtitle>
                 </v-list-item-content>
@@ -197,9 +197,7 @@ export default {
     goToId(route, id) {
       this.$router.push(`/${route}/${id}`);
     },
-    formatCreatedDate(date) {
-      return moment(date).format('LL');
-    },
+    formatCreatedDate: date => moment(date).format('LL'),
     onScroll() {
       this.checkIfPageBottom();
     },

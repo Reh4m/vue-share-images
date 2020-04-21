@@ -37,13 +37,13 @@
 export default {
   name: "SigninRequired",
   props: {
-    dialog: Boolean,
+    dialog: Boolean
   },
   methods: {
     closeDialog() {
       this.$emit("closeDialog");
-    },
-  },
+    }
+  }
 };
 </script>
 

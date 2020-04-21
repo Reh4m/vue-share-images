@@ -20,6 +20,7 @@ type Post {
   description: String!
   createdDate: Date
   likes: Int
+  messagesCount: Int!
   createdBy: User!
   messages: [Message]
 }
