@@ -193,7 +193,6 @@ export const UPDATE_USER_POST = gql`
     ) {
       _id
       ...PostFields
-      likes
       createdDate
       createdBy {
         _id
@@ -243,20 +242,14 @@ export const DELETE_USER_MESSAGE = gql `
 export const LIKE_POST = gql`
   mutation($postId: ID!, $username: String!) {
     likePost(postId: $postId, username: $username) {
-      likes
-      favorites {
+      post {
         _id
-        title
-        imageUrl
+        likes {
+          _id
+          username
+        }
+        likeCount
       }
-    }
-  }
-`;
-
-export const UNLIKE_POST = gql`
-  mutation($postId: ID!, $username: String!) {
-    unlikePost(postId: $postId, username: $username) {
-      likes
       favorites {
         _id
         title

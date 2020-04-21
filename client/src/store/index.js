@@ -149,7 +149,8 @@ export default new Vuex.Store({
             query: INFINITE_SCROLL_POSTS,
             variables: {
               pageNum: 1,
-              pageSize: 4
+              pageSize: 4,
+              orderBy: 'createdDate_desc'
             }
           },
           {
@@ -200,7 +201,8 @@ export default new Vuex.Store({
             query: INFINITE_SCROLL_POSTS,
             variables: {
               pageNum: 1,
-              pageSize: 4
+              pageSize: 4,
+              orderBy: 'createdDate_desc'
             }
           },{
             query: GET_USER_POSTS,

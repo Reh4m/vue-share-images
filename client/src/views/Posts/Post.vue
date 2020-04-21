@@ -92,30 +92,19 @@
             <v-list-item-action>
               <template v-if="user">
                 <v-btn
-                  v-if="checkIfPostLiked(getPost._id)"
                   text
-                  color="red lighten-1"
-                  @click="handleUnlikePost()"
-                  :loading="loadingLike"
-                >
-                  <v-icon left>mdi-heart</v-icon>
-                  {{ getPost.likes }}
-                </v-btn>
-                <v-btn
-                  v-else
-                  text
-                  color="#707070"
+                  :color="checkIfPostLiked ? '#EF5350' : '#707070'"
                   @click="handleLikePost()"
                   :loading="loadingLike"
                 >
                   <v-icon left>mdi-heart-outline</v-icon>
-                  {{ getPost.likes }}
+                  {{ getPost.likeCount }}
                 </v-btn>
               </template>
               <template v-else>
                 <v-btn text color="#707070" @click="signinRequired = true">
                   <v-icon left>mdi-heart-outline</v-icon>
-                  {{ getPost.likes }}
+                  {{ getPost.likeCount }}
                 </v-btn>
               </template>
             </v-list-item-action>
@@ -154,7 +143,6 @@ export default {
     PostMessages
   },
   data: () => ({
-    postLiked: false,
     imageDialog: false,
     messageBody: '',
     isFormValid: true,
@@ -183,6 +171,11 @@ export default {
   },
   computed: {
     ...mapGetters(['user', 'userFavorites']),
+    checkIfPostLiked() {
+      // check if user favorites includes post with id of 'postId'
+      const fave = this.userFavorites.some(fave => fave._id === this.postId);
+      return this.userFavorites && fave;
+    },
   },
   methods: {
     closeDialog(){
@@ -192,20 +185,13 @@ export default {
     goToUser(userId) {
       this.$router.push(`/profile/${userId}`);
     },
-    checkIfPostLiked(postId) {
-      // check if user favorites includes post with id of 'postId'
-      const fave = this.userFavorites.some(fave => fave._id === postId);
-      if (this.userFavorites && fave) {
-        this.postLiked = true;
-        return true;
-      } else {
-        this.postLiked = false;
-        return false;
-      }
+    goToPreviousPage() {
+      this.$router.go(-1);
     },
-    handleToggleLikes() {
-      if (this.postLiked) this.handleUnlikePost();
-      else this.handleLikePost();
+    toggleImageDialog() {
+      if (window.innerWidth > 500) {
+        this.imageDialog = !this.imageDialog;
+      };
     },
     handleLikePost() {
       this.loadingLike = true;
@@ -216,70 +202,17 @@ export default {
       this.$apollo.mutate({
         mutation: LIKE_POST,
         variables,
-        update: (cache, { data: { likePost }}) => {
-          const data = cache.readQuery({
-            query: GET_POST,
-            variables: { postId: this.postId }
-          });
-          data.getPost.likes += 1;
-          cache.writeQuery({
-            query: GET_POST,
-            variables: { postId: this.postId },
-            data
-          });
-        }
       }).then(({ data }) => {
         this.loadingLike = false;
+        // remove/add post to user favorites
         const updatedUser = { 
-          ...this.user, favorites: 
-          data.likePost.favorites 
+          ...this.user, favorites: data.likePost.favorites
         };
         this.$store.commit('setUser', updatedUser);
       }).catch(err => {
         this.loadingLike = false;
         console.error(err)
       });
-    },
-    handleUnlikePost() {
-      this.loadingLike = true
-      const variables = {
-        postId: this.postId,
-        username: this.user.username
-      };
-      this.$apollo.mutate({
-        mutation: UNLIKE_POST,
-        variables,
-        update: (cache, { data: { unlikePost }}) => {
-          const data = cache.readQuery({
-            query: GET_POST,
-            variables: { postId: this.postId }
-          });
-          data.getPost.likes -= 1;
-          cache.writeQuery({
-            query: GET_POST,
-            variables: { postId: this.postId },
-            data
-          });
-        }
-      }).then(({ data }) => {
-        this.loadingLike = false;
-        const updatedUser = { 
-          ...this.user, 
-          favorites: data.unlikePost.favorites 
-        };
-        this.$store.commit('setUser', updatedUser);
-      }).catch(err => {
-        this.loadingLike = false;
-        console.error(err);
-      });
-    },
-    goToPreviousPage() {
-      this.$router.go(-1);
-    },
-    toggleImageDialog() {
-      if (window.innerWidth > 500) {
-        this.imageDialog = !this.imageDialog;
-      }
     },
   },
 }

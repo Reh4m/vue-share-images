@@ -99,8 +99,9 @@
 <script>
 import moment from 'moment'
 import {
-ADD_POST_MESSAGE,
-DELETE_USER_MESSAGE
+  ADD_POST_MESSAGE,
+  DELETE_USER_MESSAGE,
+  GET_POST
 } from '../queries'
 import { mapGetters } from 'vuex'
 import NotFound from '../views/Errors/NotFound.vue';
