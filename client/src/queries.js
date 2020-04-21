@@ -19,7 +19,6 @@ export const GET_POST = gql`
     getPost(postId: $postId) {
       _id
       ...PostFields
-      likes
       createdDate
       createdBy {
         _id
@@ -49,7 +48,6 @@ export const GET_POSTS_BY_TAG = gql`
       _id
       ...PostFields
       createdDate
-      likes
       createdBy {
         _id
         username
@@ -69,7 +67,6 @@ export const SEARCH_POSTS = gql`
       description
       imageUrl
       createdDate
-      likes
     }
   }
 `;
@@ -120,7 +117,6 @@ export const GET_USER_POSTS = gql`
       _id
       ...PostFields
       createdDate
-      likes
       messages {
         _id
       }
@@ -140,7 +136,6 @@ export const INFINITE_SCROLL_POSTS = gql`
       posts {
         _id
         ...PostFields
-        likes
         createdDate
         messages {
           _id

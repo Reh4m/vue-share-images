@@ -19,8 +19,9 @@ type Post {
   categories: [String]!
   description: String!
   createdDate: Date
-  likes: Int
-  messagesCount: Int!
+  likes: [Like]
+  messageCount: Int!
+  likeCount: Int!
   createdBy: User!
   messages: [Message]
 }
@@ -30,6 +31,12 @@ type Message {
   messageBody: String!
   messageDate: Date
   messageUser: User!
+}
+
+type Like {
+  _id: ID,
+  createdDate: Date,
+  username: String
 }
 
 type PostsPage {
@@ -48,7 +55,7 @@ enum PostsOrderByInput {
 
 # likes for posts / favorites for user
 type likesFaves {
-  likes: Int
+  post: Post!
   favorites: [Post]
 }
 

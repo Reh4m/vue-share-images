@@ -5,7 +5,8 @@ const scalarDate = require('../scalarDate');
 
 module.exports = {
   Post: {
-    messagesCount: parent => parent.messages.length
+    messageCount: parent => parent.messages.length,
+    likeCount: parent => parent.likes.length
   },
   Query: {
     ...usersResolvers.Query,

@@ -79,7 +79,7 @@
                   </v-list-item-title>
                   <v-list-item-subtitle>
                     <span class="caption greylighten--text font-weight-bold">
-                      {{ post.likes }} Likes • {{ post.messagesCount }} Comments
+                      {{ post.likeCount }} Likes • {{ post.messageCount }} Comments
                     </span>
                   </v-list-item-subtitle>
                 </v-list-item-content>

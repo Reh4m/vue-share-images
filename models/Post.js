@@ -24,10 +24,14 @@ const PostSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
-  likes: {
-    type: Number,
-    default: 0
-  },
+  likes: [{
+    username: {
+      type: String
+    },
+    createdDate: {
+      type: String,
+    }
+  }],
   // property ('createdBy') === path
   // ref ('User') === model
   createdBy: {

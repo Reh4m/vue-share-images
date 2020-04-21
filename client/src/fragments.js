@@ -7,7 +7,8 @@ export const fragments = {
       imageUrl
       description
       categories
-      messagesCount
+      messageCount
+      likeCount
     }
   `,
 };
