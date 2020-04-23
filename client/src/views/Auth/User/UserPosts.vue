@@ -3,7 +3,7 @@
     <!-- posts progress (shown if loading) -->
     <query-progress v-show="loading" />
 
-    <template v-if="!userPosts.length && !loading">
+    <div v-if="!userPosts.length && !loading">
       <v-row>
         <v-col class="text-center">
           <p class="font-weight-light">
@@ -14,9 +14,9 @@
           </v-btn>
         </v-col>
       </v-row>
-    </template>
+    </div>
 
-    <template v-else>
+    <div v-else>
       <v-row>
         <v-col
           cols="12"
@@ -25,7 +25,7 @@
           v-for="post in userPosts"
           :key="post._id"
         >
-          <v-card flat class="mt-3" hover>
+          <v-card flat hover>
             <v-card flat>
               <v-img
                 height="30vh"
@@ -151,7 +151,7 @@
                     :rules="categoriesRules"
                   >
                     <template
-                      v-slot:selection="{ attrs, item, parent, selected }"
+                      v-slot:selection="{ attrs, item, parent }"
                     >
                       <v-chip
                         label
@@ -172,7 +172,7 @@
           </v-container>
         </v-card>
       </v-dialog>
-    </template>
+    </div>
   </v-container>
 </template>
 

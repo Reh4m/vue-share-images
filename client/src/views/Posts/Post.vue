@@ -45,6 +45,7 @@
             <template v-slot:activator="{ on }">
               <v-img
                 id="toggle__image"
+                class="align-end"
                 max-height="50vh"
                 v-on="on"
                 :src="getPost.imageUrl"
@@ -58,7 +59,6 @@
             <v-card>
               <v-img
                 :src="getPost.imageUrl"
-                height="80vh"
                 @click.stop="toggleImageDialog"
               />
             </v-card>
@@ -73,7 +73,7 @@
           </v-card-text>
 
           <!-- actions -->
-          <v-list-item class="greylightenfive">
+          <v-list-item class="py-0">
             <v-list-item-title>
               <v-chip-group show-arrows>
                 <v-chip
@@ -90,23 +90,27 @@
               </v-chip-group>
             </v-list-item-title>
             <v-list-item-action>
-              <template v-if="user">
+              <div v-if="user">
                 <v-btn
                   text
                   :color="checkIfPostLiked ? '#EF5350' : '#707070'"
                   @click="handleLikePost()"
-                  :loading="loadingLike"
+                  :loading="loading"
                 >
                   <v-icon left>mdi-heart-outline</v-icon>
-                  {{ getPost.likeCount }}
+                  <span class="primary--text">
+                    {{ getPost.likeCount }}
+                  </span>
                 </v-btn>
-              </template>
-              <template v-else>
+              </div>
+              <div v-else>
                 <v-btn text color="#707070" @click="signinRequired = true">
                   <v-icon left>mdi-heart-outline</v-icon>
-                  {{ getPost.likeCount }}
+                  <span class="primary--text">
+                    {{ getPost.likeCount }}
+                  </span>
                 </v-btn>
-              </template>
+              </div>
             </v-list-item-action>
           </v-list-item>
         </v-card>
@@ -149,10 +153,9 @@ export default {
     messageError: '',
     signinRequired: false,
     messageRules: [
-      messageBody => 
+      messageBody =>
         messageBody.length < 10 || 'Message must be less than 200 characters'
     ],
-    loadingLike: false,
     loadingMessage: false,
     loadingDeleteMessage: false
   }),
@@ -170,7 +173,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['user', 'userFavorites']),
+    ...mapGetters(['user', 'userFavorites', 'loading']),
     checkIfPostLiked() {
       // check if user favorites includes post with id of 'postId'
       const fave = this.userFavorites.some(fave => fave._id === this.postId);
@@ -194,25 +197,11 @@ export default {
       };
     },
     handleLikePost() {
-      this.loadingLike = true;
       const variables = {
         postId: this.postId,
         username: this.user.username
       };
-      this.$apollo.mutate({
-        mutation: LIKE_POST,
-        variables,
-      }).then(({ data }) => {
-        this.loadingLike = false;
-        // remove/add post to user favorites
-        const updatedUser = { 
-          ...this.user, favorites: data.likePost.favorites
-        };
-        this.$store.commit('setUser', updatedUser);
-      }).catch(err => {
-        this.loadingLike = false;
-        console.error(err)
-      });
+      this.$store.dispatch('likePost', variables);
     },
   },
 }
@@ -220,8 +209,8 @@ export default {
 
 <style lang="css">
   #toggle__image {
-    cursor: -moz-zoom-in; 
-    cursor: -webkit-zoom-in; 
+    cursor: -moz-zoom-in;
+    cursor: -webkit-zoom-in;
     cursor: zoom-in;
   }
 </style>

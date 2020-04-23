@@ -6,21 +6,20 @@
     @keydown.esc="closeDialog"
   >
     <v-card>
-      <v-container>
-        <v-card-title>
-          Sign in Required
-        </v-card-title>
-        <v-card-text>
-          Liking, commenting and many other features are only possible after you
-          sign in.
-        </v-card-text>
-      </v-container>
+      <v-card-title>
+        Sign in Required
+      </v-card-title>
+      <v-card-text>
+        Liking, commenting and many other features are only possible after you
+        sign in.
+      </v-card-text>
       <v-card-actions class="greylightenfive">
         <v-spacer/>
         <v-btn text @click="closeDialog">
           Cancel
         </v-btn>
         <v-btn
+          depressed
           dark
           color="#ac5380"
           to="/signin"

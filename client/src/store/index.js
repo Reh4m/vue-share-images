@@ -13,7 +13,7 @@ import {
   UPDATE_USER_POST,
   DELETE_USER_POST,
   INFINITE_SCROLL_POSTS,
-  DELETE_USER_MESSAGE,
+  LIKE_POST
 } from "../queries";
 
 Vue.use(Vuex)
@@ -115,6 +115,25 @@ export default new Vuex.Store({
       .catch(err => {
         commit('setLoading', false);
         console.error(err)
+      });
+    },
+    likePost: ({ state, commit }, payload) => {
+      commit('setLoading', true);
+      apolloClient
+      .mutate({
+        mutation: LIKE_POST,
+        variables: payload
+      })
+      .then(({ data }) => {
+        commit('setLoading', false);
+        // remove/add post to user favorites
+        const updatedUser = {
+          ...state.user, favorites: data.likePost.favorites
+        };
+        commit('setUser', updatedUser);
+      }).catch(err => {
+        commit('setLoading', false);
+        console.error(err);
       });
     },
     addPost: ({ state, commit }, payload) => {

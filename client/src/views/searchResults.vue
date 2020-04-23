@@ -3,7 +3,7 @@
     <query-progress v-show="loading"/>
 
     <!-- if not match results -->
-    <template v-if="!searchResults.length && !loading">
+    <div v-if="!searchResults.length && !loading">
       <v-row>
         <v-col class="text-center">
           <span class="title primary--text">
@@ -14,10 +14,10 @@
           </p>
         </v-col>
       </v-row>
-    </template>
+    </div>
 
     <!-- posts card -->
-    <template v-else>
+    <div v-else>
       <v-row>
         <v-col
           v-for="result in searchResults"
@@ -57,7 +57,7 @@
           </v-card>
         </v-col>
       </v-row>
-    </template>
+    </div>
   </v-container>
 </template>
 

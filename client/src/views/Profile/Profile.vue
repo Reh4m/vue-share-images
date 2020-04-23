@@ -3,7 +3,7 @@
     <!-- user progress (shown if loading) -->
     <query-progress v-show="$apollo.queries.getUser.loading" />
 
-    <template v-if="getUser && getUserPosts && !$apollo.loading">
+    <div v-if="getUser && getUserPosts && !$apollo.loading">
       <!-- user details card -->
       <v-card flat tile>
         <v-container>
@@ -14,8 +14,8 @@
             <v-list-item-content>
               <v-list-item-title
                 class="
-                    title 
-                    text-capitalize 
+                    title
+                    text-capitalize
                     darklighten--text
                   "
               >
@@ -40,7 +40,7 @@
       </v-card>
 
       <router-view />
-    </template>
+    </div>
   </v-container>
 </template>
 

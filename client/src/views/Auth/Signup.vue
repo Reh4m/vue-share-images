@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-row align="center" justify="center">
       <v-col cols="12" sm="8" md="4">
-        <v-card flat color="#b5525c" dark :disabled="loading">
+        <v-card flat color="#b5525c" dark>
           <v-toolbar dark color="#424242">
             <v-toolbar-title>
               Create account

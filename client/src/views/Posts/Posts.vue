@@ -69,7 +69,7 @@
               :src="post.imageUrl"
             ></v-img>
 
-            <v-list-group :value="false" :ripple="false" mandatory>
+            <v-list-group :value="false" :ripple="false">
               <template v-slot:activator>
                 <v-list-item-content class="my-2">
                   <v-list-item-title>
@@ -174,7 +174,7 @@ export default {
       // if this.isPageBottom evaluates to true, show more posts
       if (value === true && this.showMoreEnabled) {
         this.showMorePosts();
-      }
+      };
     }
   },
   methods: {

@@ -1,32 +1,39 @@
 <template>
   <v-col cols="12">
     <v-card flat :loading="loadingDeleteMessage">
-      <v-subheader class="caption darklighten--text font-weight-bold">
+      <v-subheader class="caption darklighten--text">
         {{ messages.length }}
-        {{ messages.length === 1 ? "Message" : "Messages" }}
+        {{ messages.length === 1 ? 'Message' : 'Messages' }}
       </v-subheader>
-      <v-container>
-        <!-- message input -->
-        <v-form
-          v-if="user"
-          v-model="isFormValid"
-          lazy-validation
-          ref="form"
-          @submit.prevent="handleAddPostMessage"
-        >
-          <v-text-field
-            v-model="messageBody"
-            hide-details
-            filled
-            placeholder="Add message"
-            :append-icon="messageBody && 'mdi-send'"
-            @click:append="handleAddPostMessage"
-            :rules="messageRules"
-            :loading="loadingMessage"
-          >
-          </v-text-field>
-        </v-form>
-        <v-banner v-else single-line>
+      <!-- message input -->
+      <template v-if="user">
+        <v-list-item>
+          <v-list-item-avatar>
+            <v-img :src="user.avatar" />
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-form
+              v-model="isFormValid"
+              lazy-validation
+              ref="form"
+              @submit.prevent="handleAddPostMessage"
+            >
+              <v-text-field
+                v-model="messageBody"
+                hide-details
+                filled
+                placeholder="Add message"
+                :append-icon="messageBody && 'mdi-send'"
+                @click:append="handleAddPostMessage"
+                :rules="messageRules"
+                :loading="loadingMessage"
+              ></v-text-field>
+            </v-form>
+          </v-list-item-content>
+        </v-list-item>
+      </template>
+      <template v-else>
+        <v-banner single-line>
           Sign in to leave a message
           <template v-slot:actions>
             <v-btn
@@ -38,60 +45,58 @@
             </v-btn>
           </template>
         </v-banner>
-        <!-- messages -->
-        <v-list v-if="messages.length" three-line>
-          <template v-for="(message, index) in messages">
-            <v-divider v-if="index != 0" :key="message._id"/>
-            <v-list-item>
-              <v-list-item-avatar v-ripple>
-                <v-img :src="message.messageUser.avatar" />
-              </v-list-item-avatar>
+      </template>
 
-              <v-list-item-content>
-                <v-list-item-title class="caption">
-                  <span class="font-weight-bold">
-                    <router-link
-                      :class="
-                        checkIfOwnMessage(message)
-                          ? 'indigo--text'
-                          : 'primary--text'
-                      "
-                      :to="`/profile/${message.messageUser._id}`"
-                    >
-                      {{ message.messageUser.name }}
-                    </router-link>
-                  </span>
-                </v-list-item-title>
-                <v-list-item-subtitle class="caption darklighten--text">
-                  {{ message.messageBody }}
-                </v-list-item-subtitle>
-                <v-list-item-subtitle class="caption">
-                  {{ getTimeFromNow(message.messageDate) }}
-                </v-list-item-subtitle>
-              </v-list-item-content>
+      <!-- messages -->
+      <v-list v-if="messages.length" three-line>
+        <v-list-item v-for="(message, index) in messages" :key="message._id">
+          <v-list-item-avatar v-ripple>
+            <v-img :src="message.messageUser.avatar" />
+          </v-list-item-avatar>
 
-              <v-list-item-action v-if="checkIfOwnMessage(message)">
-                <v-menu left transition="scroll-y-transition">
-                  <template v-slot:activator="{ on }">
-                    <v-btn icon color="primary" v-on="on">
-                      <v-icon>mdi-dots-vertical</v-icon>
-                    </v-btn>
-                  </template>
-                  <v-list>
-                    <v-list-item
-                      @click="handleDeleteUserMessage(message._id, index)"
-                    >
-                      <v-list-item-content>
-                        <v-list-item-title>Delete</v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </v-list>
-                </v-menu>
-              </v-list-item-action>
-            </v-list-item>
-          </template>
-        </v-list>
-      </v-container>
+          <v-list-item-content>
+            <v-list-item-title class="caption">
+              <span class="font-weight-bold">
+                <router-link
+                  :class="
+                    checkIfOwnMessage(message)
+                      ? 'indigo--text'
+                      : 'primary--text'
+                  "
+                  :to="`/profile/${message.messageUser._id}`"
+                >
+                  {{ message.messageUser.name }}
+                </router-link>
+              </span>
+            </v-list-item-title>
+            <v-list-item-subtitle class="caption darklighten--text">
+              {{ message.messageBody }}
+            </v-list-item-subtitle>
+            <v-list-item-subtitle class="caption">
+              {{ getTimeFromNow(message.messageDate) }}
+            </v-list-item-subtitle>
+          </v-list-item-content>
+
+          <v-list-item-action v-if="checkIfOwnMessage(message)">
+            <v-menu left transition="scroll-y-transition">
+              <template v-slot:activator="{ on }">
+                <v-btn icon color="primary" v-on="on">
+                  <v-icon>mdi-dots-vertical</v-icon>
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item
+                  @click="handleDeleteUserMessage(message._id, index)"
+                >
+                  <v-list-item-content>
+                    <v-list-item-title>Delete</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </v-list-item-action>
+        </v-list-item>
+      </v-list>
     </v-card>
   </v-col>
 </template>
@@ -120,8 +125,8 @@ export default {
     messageError: '',
     signinRequired: false,
     messageRules: [
-      messageBody => 
-        messageBody.length < 10 || 'Message must be less than 200 characters'
+      messageBody =>
+        messageBody.length < 100 || 'Message must be less than 200 characters'
     ],
     loadingLike: false,
     loadingMessage: false,
@@ -201,7 +206,7 @@ export default {
       });
     },
     handleDeleteUserMessage(messageId, index) {
-      const deleteMessage = 
+      const deleteMessage =
         window.confirm('Are you sure want to delete this message?');
       if (deleteMessage) {
         this.deleteUserMessage(messageId, index);

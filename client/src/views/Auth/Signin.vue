@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-row justify="center">
       <v-col cols="12" sm="8" md="4">
-        <v-card flat dark color="#8b4367" :disabled="loading">
+        <v-card flat dark color="#8b4367">
           <v-toolbar dark color="#424242">
             <v-toolbar-title>
               Welcome back
