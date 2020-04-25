@@ -24,20 +24,7 @@
           v-for="post in getUserPosts"
           :key="post._id"
         >
-          <v-card flat v-ripple hover @click="goToPost(post._id)">
-            <v-img height="30vh" :src="post.imageUrl"></v-img>
-
-            <v-card-title>
-              <span class="caption darklighten--text font-weight-bold">
-                {{ post.title }}
-              </span>
-            </v-card-title>
-            <v-card-subtitle>
-              <span class="caption greylighten--text font-weight-bold">
-                {{ post.likeCount }} Likes • {{ post.messageCount }} Messages
-              </span>
-            </v-card-subtitle>
-          </v-card>
+          <PostCard :post="post"/>
         </v-col>
       </v-row>
     </div>

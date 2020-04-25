@@ -35,7 +35,7 @@ type Message {
 
 type Like {
   _id: ID,
-  createdDate: Date,
+  createdDate: String,
   username: String
 }
 
@@ -99,7 +99,6 @@ type Mutation {
   updateUserBanner(userId: ID!, banner: String!): User!
   deleteUserPost(postId: ID!): Post!
   likePost(postId: ID!, username: String!): likesFaves!
-  unlikePost(postId: ID!, username: String!): likesFaves!
   signinUser(username: String!, password: String!): Token
   signupUser(
     username: String!, 

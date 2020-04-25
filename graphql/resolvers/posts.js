@@ -151,10 +151,7 @@ module.exports = {
         });
       } else {
         // not liked, like post and add to user favorites
-        post.likes.push({
-          username,
-          createdDate: new Date().toISOString()
-        });
+        post.likes.push({ username });
         // find user, add id at post to its favorites array
         // (whitch will be populate as posts)
         user = await User.findOneAndUpdate(

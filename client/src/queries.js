@@ -1,6 +1,5 @@
-
 import { gql } from 'apollo-boost';
-import { fragments } from "./fragments";
+import { fragments } from './fragments';
 
 // Post Queries
 export const GET_POSTS = gql`
@@ -39,7 +38,7 @@ export const GET_POST = gql`
       }
     }
   }
-  ${ fragments.postFields }
+  ${fragments.postFields}
 `;
 
 export const GET_POSTS_BY_TAG = gql`
@@ -56,7 +55,7 @@ export const GET_POSTS_BY_TAG = gql`
       }
     }
   }
-  ${ fragments.postFields }
+  ${fragments.postFields}
 `;
 
 export const SEARCH_POSTS = gql`
@@ -87,6 +86,8 @@ export const GET_CURRENT_USER = gql`
         title
         imageUrl
         createdDate
+        messageCount
+        likeCount
       }
     }
   }
@@ -122,14 +123,14 @@ export const GET_USER_POSTS = gql`
       }
     }
   }
-  ${ fragments.postFields }
+  ${fragments.postFields}
 `;
 
 export const INFINITE_SCROLL_POSTS = gql`
   query($pageNum: Int!, $pageSize: Int!, $orderBy: PostsOrderByInput) {
     infiniteScrollPosts(
-      pageNum: $pageNum,
-      pageSize: $pageSize,
+      pageNum: $pageNum
+      pageSize: $pageSize
       orderBy: $orderBy
     ) {
       hasMore
@@ -149,46 +150,46 @@ export const INFINITE_SCROLL_POSTS = gql`
       }
     }
   }
-  ${ fragments.postFields }
+  ${fragments.postFields}
 `;
 
 // Posts Mutations
 export const ADD_POST = gql`
   mutation(
-    $title: String!,
-    $imageUrl: String!,
-    $categories: [String]!,
-    $description: String!,
+    $title: String!
+    $imageUrl: String!
+    $categories: [String]!
+    $description: String!
     $creatorId: ID!
   ) {
     addPost(
-      title: $title,
-      imageUrl: $imageUrl,
-      categories: $categories,
-      description: $description,
+      title: $title
+      imageUrl: $imageUrl
+      categories: $categories
+      description: $description
       creatorId: $creatorId
     ) {
       ...PostFields
     }
   }
-  ${ fragments.postFields }
+  ${fragments.postFields}
 `;
 
 export const UPDATE_USER_POST = gql`
   mutation(
-    $postId: ID!,
-    $userId: ID!,
-    $title: String!,
-    $imageUrl: String!,
-    $categories: [String]!,
+    $postId: ID!
+    $userId: ID!
+    $title: String!
+    $imageUrl: String!
+    $categories: [String]!
     $description: String!
   ) {
     updateUserPost(
-      postId: $postId,
-      userId: $userId,
-      title: $title,
-      imageUrl: $imageUrl,
-      categories: $categories,
+      postId: $postId
+      userId: $userId
+      title: $title
+      imageUrl: $imageUrl
+      categories: $categories
       description: $description
     ) {
       _id
@@ -200,7 +201,7 @@ export const UPDATE_USER_POST = gql`
       }
     }
   }
-  ${ fragments.postFields }
+  ${fragments.postFields}
 `;
 
 export const DELETE_USER_POST = gql`
@@ -209,13 +210,13 @@ export const DELETE_USER_POST = gql`
       _id
     }
   }
-`
+`;
 
 export const ADD_POST_MESSAGE = gql`
   mutation($messageBody: String!, $userId: ID!, $postId: ID!) {
     addPostMessage(
-      messageBody: $messageBody,
-      userId: $userId,
+      messageBody: $messageBody
+      userId: $userId
       postId: $postId
     ) {
       _id
@@ -231,7 +232,7 @@ export const ADD_POST_MESSAGE = gql`
   }
 `;
 
-export const DELETE_USER_MESSAGE = gql `
+export const DELETE_USER_MESSAGE = gql`
   mutation($postId: ID!, $messageId: ID!) {
     deleteUserMessage(postId: $postId, messageId: $messageId) {
       _id
@@ -269,8 +270,18 @@ export const SIGNIN_USER = gql`
 `;
 
 export const SIGNUP_USER = gql`
-  mutation($username: String!, $name: String!, $email: String!, $password: String!) {
-    signupUser(username: $username, name: $name, email: $email, password: $password) {
+  mutation(
+    $username: String!
+    $name: String!
+    $email: String!
+    $password: String!
+  ) {
+    signupUser(
+      username: $username
+      name: $name
+      email: $email
+      password: $password
+    ) {
       token
     }
   }

@@ -3,7 +3,7 @@
     <!-- user progress (shown if loading) -->
     <query-progress v-show="$apollo.queries.getUser.loading" />
 
-    <div v-if="getUser && getUserPosts && !$apollo.loading">
+    <div v-if="getUser && getUserPosts">
       <!-- user details card -->
       <v-card flat tile>
         <v-container>

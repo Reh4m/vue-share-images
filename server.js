@@ -32,7 +32,9 @@ const getUser = async token => {
       return await jwt.verify(token, process.env.SECRET);
       console.log(user);
     } catch (err) {
-      throw new AuthenticationError('Your session has ended. Please sign in again');
+      throw new AuthenticationError(
+        'Your session has ended. Please sign in again'
+      );
     };
   };
 };

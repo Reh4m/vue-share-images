@@ -48,54 +48,56 @@
       </template>
 
       <!-- messages -->
-      <v-list v-if="messages.length" three-line>
-        <v-list-item v-for="(message, index) in messages" :key="message._id">
-          <v-list-item-avatar v-ripple>
-            <v-img :src="message.messageUser.avatar" />
-          </v-list-item-avatar>
+      <v-list three-line>
+        <div v-if="messages.length">
+          <v-list-item v-for="(message, index) in messages" :key="message._id">
+            <v-list-item-avatar v-ripple>
+              <v-img :src="message.messageUser.avatar" />
+            </v-list-item-avatar>
 
-          <v-list-item-content>
-            <v-list-item-title class="caption">
-              <span class="font-weight-bold">
-                <router-link
-                  :class="
-                    checkIfOwnMessage(message)
-                      ? 'indigo--text'
-                      : 'primary--text'
-                  "
-                  :to="`/profile/${message.messageUser._id}`"
-                >
-                  {{ message.messageUser.name }}
-                </router-link>
-              </span>
-            </v-list-item-title>
-            <v-list-item-subtitle class="caption darklighten--text">
-              {{ message.messageBody }}
-            </v-list-item-subtitle>
-            <v-list-item-subtitle class="caption">
-              {{ getTimeFromNow(message.messageDate) }}
-            </v-list-item-subtitle>
-          </v-list-item-content>
+            <v-list-item-content>
+              <v-list-item-title class="caption">
+                <span class="font-weight-bold">
+                  <router-link
+                    :class="
+                      checkIfOwnMessage(message)
+                        ? 'indigo--text'
+                        : 'primary--text'
+                    "
+                    :to="`/profile/${message.messageUser._id}`"
+                  >
+                    {{ message.messageUser.name }}
+                  </router-link>
+                </span>
+              </v-list-item-title>
+              <v-list-item-subtitle class="caption darklighten--text">
+                {{ message.messageBody }}
+              </v-list-item-subtitle>
+              <v-list-item-subtitle class="caption">
+                {{ getTimeFromNow(message.messageDate) }}
+              </v-list-item-subtitle>
+            </v-list-item-content>
 
-          <v-list-item-action v-if="checkIfOwnMessage(message)">
-            <v-menu left transition="scroll-y-transition">
-              <template v-slot:activator="{ on }">
-                <v-btn icon color="primary" v-on="on">
-                  <v-icon>mdi-dots-vertical</v-icon>
-                </v-btn>
-              </template>
-              <v-list>
-                <v-list-item
-                  @click="handleDeleteUserMessage(message._id, index)"
-                >
-                  <v-list-item-content>
-                    <v-list-item-title>Delete</v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list>
-            </v-menu>
-          </v-list-item-action>
-        </v-list-item>
+            <v-list-item-action v-if="checkIfOwnMessage(message)">
+              <v-menu left transition="scroll-y-transition">
+                <template v-slot:activator="{ on }">
+                  <v-btn icon color="primary" v-on="on">
+                    <v-icon>mdi-dots-vertical</v-icon>
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item
+                    @click="handleDeleteUserMessage(message._id, index)"
+                  >
+                    <v-list-item-content>
+                      <v-list-item-title>Delete</v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </v-list-item-action>
+          </v-list-item>
+        </div>
       </v-list>
     </v-card>
   </v-col>

@@ -29,7 +29,8 @@ const PostSchema = new mongoose.Schema({
       type: String
     },
     createdDate: {
-      type: String,
+      type: Date,
+      default: Date.now
     }
   }],
   // property ('createdBy') === path

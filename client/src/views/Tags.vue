@@ -5,11 +5,11 @@
 
     <v-row v-if="getPostsByTag">
       <v-col cols="12" class="display-1 text-center">
-        <span class="primary--text text-capitalize"> {{ tag }} Tags </span>
+        <span class="text-capitalize"> {{ tag }} Tags </span>
       </v-col>
 
       <!-- sorting posts -->
-     <v-col cols="12">
+      <v-col cols="12">
         <v-layout>
           <div class="hidden-xs-only">
             <v-tooltip bottom>
@@ -69,39 +69,7 @@
         :md="mozaicLayout ? 6 : 4"
       >
         <v-skeleton-loader :loading="refetchPosts" type="card-avatar">
-          <v-card
-            hover
-            flat
-            v-ripple="{ center: false }"
-            @click="goToId('posts', post._id)"
-          >
-            <v-img height="30vh" :src="post.imageUrl" />
-
-            <!-- user info -->
-            <v-list class="py-0">
-              <v-list-item>
-                <v-list-item-avatar size="30">
-                  <img :src="post.createdBy.avatar" />
-                </v-list-item-avatar>
-
-                <v-list-item-content>
-                  <v-list-item-title>
-                    <span class=" caption darklighten--text font-weight-bold">
-                      {{ post.title }}
-                      <span class="text-capitalize indigo--text">
-                        • {{ tag }}
-                      </span>
-                    </span>
-                  </v-list-item-title>
-                  <v-list-item-subtitle>
-                    <span class="caption font-weight-bold">
-                      {{ getTimeFromNow(post.createdDate) }}
-                    </span>
-                  </v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-          </v-card>
+          <PostCard :post="post"/>
         </v-skeleton-loader>
       </v-col>
     </v-row>

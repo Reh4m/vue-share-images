@@ -73,7 +73,7 @@
           </v-card-text>
 
           <!-- actions -->
-          <v-list-item class="py-0">
+          <v-list-item class="py-0 greylightenfive">
             <v-list-item-title>
               <v-chip-group show-arrows>
                 <v-chip
@@ -93,11 +93,13 @@
               <div v-if="user">
                 <v-btn
                   text
-                  :color="checkIfPostLiked ? '#EF5350' : '#707070'"
+                  :color="checkIfPostLiked ? '#E57373' : '#707070'"
                   @click="handleLikePost()"
                   :loading="loading"
                 >
-                  <v-icon left>mdi-heart-outline</v-icon>
+                  <v-icon left>{{
+                    checkIfPostLiked ? 'mdi-heart' : 'mdi-heart-outline'
+                  }}</v-icon>
                   <span class="primary--text">
                     {{ getPost.likeCount }}
                   </span>

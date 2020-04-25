@@ -18,6 +18,9 @@ Vue.component('signin-required', SigninRequired);
 import QueryProgress from './components/QueryProgress';
 Vue.component('query-progress', QueryProgress);
 
+import PostCard from './components/PostCard';
+Vue.component('PostCard', PostCard);
+
 // errors page
 window.eventBus = new Vue();
 Vue.use(ErrorPage);

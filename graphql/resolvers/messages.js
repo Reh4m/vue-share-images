@@ -19,11 +19,12 @@ module.exports = {
       return post.messages[0];
     },
     deleteUserMessage: async (_, { postId, messageId }, { Post }) => {
-      const message = await Post.findOneAndUpdate(
+      const post = await Post.findOneAndUpdate(
+        // find post id and refresh document
         { _id: postId },
         { $pull: { messages: { _id: messageId } } }
       );
-      return message.messages[0];
+      return post.messages[0];
     },
   }
 }
