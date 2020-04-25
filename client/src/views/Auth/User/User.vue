@@ -1,7 +1,7 @@
 <template lang="html">
   <v-container v-if="user">
     <!-- user details card -->
-    <v-card flat tile>
+    <v-card flat>
       <v-container>
         <v-list-item three-line>
           <v-list-item-avatar size="80">

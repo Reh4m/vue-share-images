@@ -5,7 +5,7 @@
 
     <div v-if="getUser && getUserPosts">
       <!-- user details card -->
-      <v-card flat tile>
+      <v-card flat>
         <v-container>
           <v-list-item three-line>
             <v-list-item-avatar size="80" style="border: 10px">
