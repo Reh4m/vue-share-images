@@ -6,35 +6,37 @@
       v-ripple
       @click="goToPost(post._id)"
     />
-    <v-list-item>
-      <v-list-item-content>
-        <v-list-item-title>
-          <span class="caption darklighten--text font-weight-bold">
-            {{ post.title }}
-          </span>
-        </v-list-item-title>
-        <v-list-item-subtitle>
-          <span class="caption greylighten--text font-weight-bold">
-            {{ post.likeCount }} Likes • {{ post.messageCount }} Messages
-          </span>
-        </v-list-item-subtitle>
-      </v-list-item-content>
-      <v-list-item-action v-if="checkIfUserFavorite">
-        <v-tooltip top>
-          <template v-slot:activator="{ on }">
-            <v-btn
-              icon
-              color="red lighten-2"
-              v-on="on"
-              @click="handleUnlikePost(post._id)"
-            >
-              <v-icon>mdi-heart</v-icon>
-            </v-btn>
-          </template>
-          <span>Unlike post</span>
-        </v-tooltip>
-      </v-list-item-action>
-    </v-list-item>
+    <v-list class="py-1">
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-title>
+            <span class="caption darklighten--text font-weight-bold">
+              {{ post.title }}
+            </span>
+          </v-list-item-title>
+          <v-list-item-subtitle>
+            <span class="caption greylighten--text font-weight-bold">
+              {{ post.likeCount }} Likes • {{ post.messageCount }} Messages
+            </span>
+          </v-list-item-subtitle>
+        </v-list-item-content>
+        <v-list-item-action v-if="checkIfUserFavorite">
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                icon
+                color="red lighten-2"
+                v-on="on"
+                @click="handleUnlikePost(post._id)"
+              >
+                <v-icon>mdi-heart</v-icon>
+              </v-btn>
+            </template>
+            <span>Unlike post</span>
+          </v-tooltip>
+        </v-list-item-action>
+      </v-list-item>
+    </v-list>
   </v-card>
 </template>
 

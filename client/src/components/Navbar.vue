@@ -1,6 +1,5 @@
 <template lang="html">
   <div>
-    <!-- navbar -->
     <v-app-bar app dark color="#3a9679">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
 
