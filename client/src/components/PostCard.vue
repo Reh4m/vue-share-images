@@ -19,7 +19,7 @@
           </span>
         </v-list-item-subtitle>
       </v-list-item-content>
-      <v-list-item-action v-if="checkIfPostLiked">
+      <v-list-item-action v-if="checkIfUserFavorite">
         <v-tooltip top>
           <template v-slot:activator="{ on }">
             <v-btn
@@ -49,12 +49,11 @@ export default {
   },
   computed: {
     ...mapGetters(["user", "loading", "userFavorites"]),
-    checkIfPostLiked() {
-      // check if user favorites includes post with id of 'postId'
-      const fave = this.userFavorites.some(
-        fave => fave._id === this.post._id
+    checkIfUserFavorite() {
+      return (
+        this.userFavorites &&
+        this.userFavorites.some(fave => fave._id === this.post._id)
       );
-      return this.userFavorites && fave;
     }
   },
   methods: {
