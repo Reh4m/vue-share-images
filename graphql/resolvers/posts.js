@@ -18,23 +18,25 @@ const handleSortPostsBy = orderBy => {
 module.exports = {
   Query: {
     getPosts: async (_, args, { Post }) => {
-      const posts = await Post.find({})
+      const posts = await Post.find()
         .sort({ createdDate: 'desc' })
         .populate({
           path: "createdBy",
           model: "User"
         })
-        .limit(5)
+        .limit(5);
       return posts;
     },
     getUserPosts: async (_, { userId }, { Post }) => {
       const posts = await Post.find({
         createdBy: userId
       })
-      .sort({ createdDate: "desc" });
+        .sort({ createdDate: 'desc' });
       return posts;
     },
-    infiniteScrollPosts: async (_, { pageNum, pageSize, orderBy }, { Post }) => {
+    infiniteScrollPosts: async (
+      _, { pageNum, pageSize, orderBy }, { Post }
+    ) => {
       // get sort value by the user
       const sortPostsBy = handleSortPostsBy(orderBy);
       let posts;
@@ -71,9 +73,9 @@ module.exports = {
           path: "messages.messageUser createdBy",
           model: "User"
         });
-        if (post) return post;
+        return post;
       } catch(err) {
-        throw new Error('Post not found.');
+        throw new Error('Post not found');
       }
     },
     getPostsByTag: async (_, { tag, orderBy }, { Post }) => {
@@ -88,8 +90,11 @@ module.exports = {
           path: "createdBy",
           model: "User"
         });
-      if (posts.length === 0 ) throw new Error('Tag not found.');
-      else return posts;
+      if (posts.length === 0 ) {
+        throw new Error('Tag not found')
+      } else {
+        return posts;
+      };
     },
     searchPosts: async (_, { searchTerm }, { Post }) => {
       const searchResults = await Post.find(

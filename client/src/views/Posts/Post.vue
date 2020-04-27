@@ -27,7 +27,7 @@
                 </span>
               </v-list-item-title>
               <v-list-item-subtitle>
-                <span class="caption greylighten--text font-weight-bold">
+                <span class="caption font-weight-bold">
                   @{{ getPost.createdBy.username }} •
                   {{ formatCreatedDate(getPost.createdDate) }}
                 </span>

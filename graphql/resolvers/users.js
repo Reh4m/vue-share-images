@@ -11,14 +11,15 @@ module.exports = {
     getCurrentUser: async (_, args, { User, currentUser }) => {
       if (!currentUser) {
         return null;
+      } else {
+        const user = await User.findOne({
+          username: currentUser.username
+        }).populate({
+          path: "favorites",
+          model: "Post"
+        });
+        return user;
       };
-      const user = await User.findOne({
-        username: currentUser.username
-      }).populate({
-        path: "favorites",
-        model: "Post"
-      });
-      return user;
     },
     getUser: async (_, { userId }, { User }) => {
       try {
@@ -27,9 +28,9 @@ module.exports = {
           path: "favorites",
           model: "Post"
         });
-        if (user) return user;
+        return user;
       } catch(err) {
-        throw new Error('User not found.');
+        throw new Error('User not found');
       }
     },
   },

@@ -84,7 +84,7 @@
 
     <!-- sidenav -->
     <v-navigation-drawer v-model="drawer" app temporary>
-      <v-toolbar dark color="#424242">
+      <v-toolbar color="primary" dark>
         <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
         <router-link class="white--text" to="/">
           <v-btn text large>

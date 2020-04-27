@@ -29,7 +29,7 @@
           <v-spacer />
           <v-menu transition="scroll-y-transition">
             <template v-slot:activator="{ on }">
-              <v-btn text color="primary" v-on="on">
+              <v-btn text v-on="on">
                 <v-icon left>mdi-sort-variant</v-icon>
                 Sort by
               </v-btn>
