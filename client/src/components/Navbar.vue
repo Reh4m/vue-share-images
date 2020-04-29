@@ -148,15 +148,6 @@ export default {
         searchTerm: this.searchTerm,
       });
     },
-    formatDescription(desc) {
-      return desc.length > 30 ? `${desc.slice(0, 30)}...` : desc;
-    },
-    checkIfUserFavorite(resultId) {
-      return (
-        this.userFavorites &&
-        this.userFavorites.some(fave => fave._id === resultId)
-      );
-    },
     handleSignoutUser() {
       this.$store.dispatch("signoutUser");
     },
@@ -171,7 +162,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["user", "searchResults", "loading", "userFavorites"]),
+    ...mapGetters(["user", "loading", "userFavorites"]),
     horizontalNavItems() {
       let items = [
         {
