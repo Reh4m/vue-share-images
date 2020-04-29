@@ -2,7 +2,7 @@
   <v-container>
     <v-row v-if="!getUserPosts.length">
       <v-col class="text-center">
-        <span class="title primary--text">
+        <span class="title">
           No posts here
         </span>
         <p class="font-weight-light">

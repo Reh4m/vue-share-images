@@ -5,7 +5,7 @@
     <!-- if not match results -->
     <v-row v-if="!searchResults.length && !loading">
       <v-col class="text-center">
-        <span class="title primary--text">
+        <span class="title">
           No search results
         </span>
         <p class="font-weight-light">

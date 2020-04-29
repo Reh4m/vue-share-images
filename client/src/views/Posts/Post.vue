@@ -65,7 +65,7 @@
           </v-dialog>
 
           <!-- description -->
-          <v-card-title class="primary--text">
+          <v-card-title>
             {{ getPost.title }}
           </v-card-title>
           <v-card-text>

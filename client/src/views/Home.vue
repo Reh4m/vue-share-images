@@ -10,10 +10,6 @@
       justify="center" 
       v-if="!loading && posts.length > 0"
     >
-      <!-- explore posts button -->
-      <v-btn color="primary" link to="/posts" large dark>
-        Explore Posts
-      </v-btn>
       <!-- posts carousel -->
       <v-col cols="12">
         <v-carousel
