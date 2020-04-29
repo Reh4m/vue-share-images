@@ -1,6 +1,6 @@
 <template lang="html">
   <div>
-    <v-app-bar app dark color="#3a9679">
+    <v-app-bar app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
 
       <router-link class="d-none d-sm-none d-md-flex" to="/">

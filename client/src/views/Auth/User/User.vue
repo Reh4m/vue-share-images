@@ -5,13 +5,13 @@
       <v-container>
         <v-list-item three-line>
           <v-list-item-avatar size="80">
-            <v-img :src="user.avatar" />
+            <v-img :src="user.avatar"/>
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title class="title text-capitalize">
               {{ user.name }}
             </v-list-item-title>
-            <v-list-item-subtitle> @{{ user.username }} </v-list-item-subtitle>
+            <v-list-item-subtitle>@{{ user.username }}</v-list-item-subtitle>
             <v-list-item-subtitle>
               Joined {{ formatDate(user.joinDate) }}
             </v-list-item-subtitle>

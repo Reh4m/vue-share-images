@@ -2,12 +2,12 @@
   <v-container fluid>
     <v-row align="center" justify="center">
       <v-col cols="12" sm="8" md="4">
-        <v-card flat color="#b5525c" dark>
-          <v-toolbar dark color="#424242">
-            <v-toolbar-title>
+        <v-card flat class="text-center" :loading="loading">
+          <v-card-text>
+            <span class="display-1 font-weight-bold">
               Create account
-            </v-toolbar-title>
-          </v-toolbar>
+            </span>
+          </v-card-text>
 
           <v-card-text>
             <v-form
@@ -81,7 +81,8 @@
 
               <v-btn
                 block
-                color="#45454d"
+                depressed
+                color="primary"
                 :loading="loading"
                 :disabled="loading || !isFormValid"
                 @click="handleSignupUser"
@@ -95,7 +96,7 @@
               </v-btn>
             </v-form>
           </v-card-text>
-          <v-card-text class="signupTheme">
+          <v-card-text class="greylightenfive">
             <v-btn outlined block text to="/signin">
               Sign In instead
             </v-btn>
