@@ -6,7 +6,7 @@
       v-ripple
       @click="goToPost(post._id)"
     />
-    <v-list class="py-1">
+    <v-list>
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title>
@@ -59,7 +59,7 @@ export default {
     }
   },
   methods: {
-    formatDate: date => moment(date).format("LL"),
+    formatDate: date => moment(date).format('LL'),
     goToPost(postId) {
       this.$router.push(`/posts/${postId}`);
     },

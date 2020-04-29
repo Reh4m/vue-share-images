@@ -10,13 +10,13 @@ import VueApollo from 'vue-apollo';
 
 // global components
 import AuthAlert from './components/AuthAlert';
-Vue.component('form-alert', AuthAlert);
+Vue.component('AuthAlert', AuthAlert);
 
 import SigninRequired from './components/SigninRequired';
-Vue.component('signin-required', SigninRequired);
+Vue.component('SigninRequired', SigninRequired);
 
 import QueryProgress from './components/QueryProgress';
-Vue.component('query-progress', QueryProgress);
+Vue.component('QueryProgress', QueryProgress);
 
 import PostCard from './components/PostCard';
 Vue.component('PostCard', PostCard);
@@ -38,18 +38,18 @@ export const defaultClient = new ApolloClient({
     // if no token with key of "token" in localStorage, add it
     if (!localStorage.token) {
       localStorage.setItem('token', '')
-    }
+    };
     // operation adds the token to an auth header, which is sent to backend
     operation.setContext({
       headers: {
         authorization: localStorage.getItem('token')
       }
-    })
+    });
   },
   onError: ({ graphQLErrors, networkError }) => {
     if (networkError) {
       console.log('[networkError]', networkError);
-    }
+    };
     if (graphQLErrors) {
       for (let err of graphQLErrors) {
         console.dir(err);
@@ -58,15 +58,15 @@ export const defaultClient = new ApolloClient({
           store.commit('setAuthError', err);
           // signout user (to clear token)
           store.dispatch('signoutUser');
-        }
-      }
-    }
+        };
+      };
+    };
   }
 });
 
 const apolloProvider = new VueApollo({ defaultClient });
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 new Vue({
   apolloProvider,

@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <!-- user progress (shown if loading) -->
-    <query-progress v-show="$apollo.queries.getUser.loading" />
+    <QueryProgress v-show="$apollo.queries.getUser.loading" />
 
     <div v-if="getUser && getUserPosts">
       <!-- user details card -->
@@ -76,14 +76,9 @@ export default {
     }
   },
   methods: {
-    formatDate(date) {
-      return moment(new Date(date)).format("ll");
-    },
-    goToPost(postId) {
-      this.$router.push(`/posts/${postId}`)
-    },
+    formatDate: date => moment(date).format('ll')
   },
-}
+};
 </script>
 
 <style scoped>

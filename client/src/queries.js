@@ -61,6 +61,7 @@ export const GET_POSTS_BY_TAG = gql`
 export const SEARCH_POSTS = gql`
   query($searchTerm: String) {
     searchPosts(searchTerm: $searchTerm) {
+      _id
       ...PostFields
     }
   }

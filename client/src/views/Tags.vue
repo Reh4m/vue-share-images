@@ -1,7 +1,7 @@
 <template lang="html">
   <v-container>
     <!-- post progress (shown if loading) -->
-    <query-progress v-show="$apollo.queries.getPostsByTag.loading"/>
+    <QueryProgress v-show="$apollo.queries.getPostsByTag.loading"/>
 
     <v-row v-if="getPostsByTag">
       <v-col cols="12" class="display-1 text-center">
@@ -62,7 +62,7 @@
 
       <!-- posts card -->
       <v-col
-        v-for="(post, index) in getPostsByTag"
+        v-for="post in getPostsByTag"
         :key="post._id"
         cols="12"
         :sm="mozaicLayout && index % 3 === 0 ? 12 : 6"
@@ -131,13 +131,7 @@ export default {
         this.refetchPosts = false;
         console.error(err)
       });
-    },
-    goToId(route, id) {
-      this.$router.push(`/${route}/${id}`);
-    },
-    getTimeFromNow(time) {
-      return moment(time).format('LL');
     }
   }
-}
+};
 </script>

@@ -8,12 +8,7 @@
             <v-img :src="user.avatar" />
           </v-list-item-avatar>
           <v-list-item-content>
-            <v-list-item-title
-              class="
-                  title 
-                  text-capitalize
-                "
-            >
+            <v-list-item-title class="title text-capitalize">
               {{ user.name }}
             </v-list-item-title>
             <v-list-item-subtitle> @{{ user.username }} </v-list-item-subtitle>
@@ -57,9 +52,7 @@ export default {
     }
   },
   methods: {
-    formatDate(date) {
-      return moment(date).format("LL");
-    },
+    formatDate: date => moment(date).format("LL")
   }
 };
 </script>

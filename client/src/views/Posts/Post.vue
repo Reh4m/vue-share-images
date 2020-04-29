@@ -1,7 +1,7 @@
 <template lang="html">
   <v-container>
     <!-- post progress (shown if loading) -->
-    <query-progress v-show="$apollo.queries.getPost.loading" />
+    <QueryProgress v-show="$apollo.queries.getPost.loading" />
 
     <!-- post -->
     <v-row v-if="getPost && !$apollo.loading">
@@ -121,7 +121,7 @@
       <!-- messages component -->
       <PostMessages :messages="getPost.messages" :postId="postId" />
 
-      <signin-required
+      <SigninRequired
         :dialog.sync="signinRequired"
         @closeDialog="closeDialog"
       />

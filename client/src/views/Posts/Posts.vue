@@ -117,7 +117,7 @@
     </v-row>
 
     <!-- post progress (shown if loading) -->
-    <query-progress v-show="$apollo.loading" />
+    <QueryProgress v-show="$apollo.loading" />
 
     <!-- text if no remaining posts -->
     <v-row v-if="!$apollo.loading && !showMoreEnabled">

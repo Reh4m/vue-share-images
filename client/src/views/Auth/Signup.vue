@@ -105,7 +105,7 @@
         <!-- form error message -->
         <v-slide-x-reverse-transition>
           <div v-if="error" class="mt-5">
-            <form-alert :message="error.message"></form-alert>
+            <AuthAlert :message="error.message"/>
           </div>
         </v-slide-x-reverse-transition>
       </v-col>
