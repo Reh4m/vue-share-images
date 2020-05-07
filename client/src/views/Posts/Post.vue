@@ -10,7 +10,7 @@
           <v-list-item two-line>
             <v-list-item-avatar
               v-ripple
-              @click="goToUser(getPost.createdBy._id)"
+              @click="goToUserProfile(getPost.createdBy._id)"
               style="cursor: pointer;"
             >
               <img :src="getPost.createdBy.avatar" />
@@ -92,17 +92,22 @@
             <v-list-item-action>
               <div v-if="user">
                 <v-btn
-                  text
-                  :color="checkIfPostLiked ? '#E57373' : '#707070'"
-                  @click="handleLikePost()"
-                  :loading="loading"
+                  v-if="checkIfPostLiked(getPost._id)"
+                  text color="#E57373"
+                  @click="handleUnlikePost()"
+                  :loading="loadingLike"
                 >
-                  <v-icon left>{{
-                    checkIfPostLiked ? 'mdi-heart' : 'mdi-heart-outline'
-                  }}</v-icon>
-                  <span class="primary--text">
-                    {{ getPost.likeCount }}
-                  </span>
+                  <v-icon left>mdi-heart</v-icon>
+                  {{ getPost.likes }}
+                </v-btn>
+                <v-btn
+                  v-else
+                  text color="#707070"
+                  @click="handleLikePost()"
+                  :loading="loadingLike"
+                >
+                  <v-icon left>mdi-heart-outline</v-icon>
+                  {{ getPost.likes }}
                 </v-btn>
               </div>
               <div v-else>
@@ -152,14 +157,12 @@ export default {
     imageDialog: false,
     messageBody: '',
     isFormValid: true,
-    messageError: '',
     signinRequired: false,
     messageRules: [
       messageBody =>
-        messageBody.length < 10 || 'Message must be less than 200 characters'
+        messageBody.length < 200 || 'Message must be less than 200 characters'
     ],
-    loadingMessage: false,
-    loadingDeleteMessage: false
+    loadingLike: false
   }),
   apollo: {
     getPost: {
@@ -175,19 +178,14 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['user', 'userFavorites', 'loading']),
-    checkIfPostLiked() {
-      // check if user favorites includes post with id of 'postId'
-      const fave = this.userFavorites.some(fave => fave._id === this.postId);
-      return this.userFavorites && fave;
-    },
+    ...mapGetters(['user', 'userFavorites', 'loading'])
   },
   methods: {
     closeDialog(){
       this.signinRequired = false;
     },
     formatCreatedDate: date => moment(new Date(date)).format('LLL'),
-    goToUser(userId) {
+    goToUserProfile(userId) {
       this.$router.push(`/profile/${userId}`);
     },
     goToPreviousPage() {
@@ -198,12 +196,80 @@ export default {
         this.imageDialog = !this.imageDialog;
       };
     },
+    checkIfPostLiked(postId) {
+      // check if user favorites includes post with id of 'postId'
+      const fave = this.userFavorites.some(fave => fave._id === postId);
+      if (this.userFavorites && fave) {
+        this.postLiked = true;
+        return true;
+      } else {
+        this.postLiked = false;
+        return false;
+      }
+    },
+    handleToggleLikes() {
+      if (this.checkIfPostLiked) this.handleUnlikePost();
+      else this.handleLikePost();
+    },
     handleLikePost() {
+      this.loadingLike = true;
       const variables = {
         postId: this.postId,
         username: this.user.username
       };
-      this.$store.dispatch('likePost', variables);
+      this.$apollo.mutate({
+        mutation: LIKE_POST,
+        variables,
+        update: (cache, { data: { likePost }}) => {
+          const data = cache.readQuery({
+            query: GET_POST,
+            variables: { postId: this.postId }
+          });
+          data.getPost.likes += 1;
+          cache.writeQuery({
+            query: GET_POST,
+            variables: { postId: this.postId },
+            data
+          });
+        }
+      }).then(({ data }) => {
+        this.loadingLike = false;
+        const updatedUser = { ...this.user, favorites: data.likePost.favorites };
+        this.$store.commit('setUser', updatedUser);
+      }).catch(err => {
+        this.loadingLike = false;
+        console.error(err)
+      });
+    },
+    handleUnlikePost() {
+      this.loadingLike = true
+      const variables = {
+        postId: this.postId,
+        username: this.user.username
+      };
+      this.$apollo.mutate({
+        mutation: UNLIKE_POST,
+        variables,
+        update: (cache, { data: { unlikePost }}) => {
+          const data = cache.readQuery({
+            query: GET_POST,
+            variables: { postId: this.postId }
+          });
+          data.getPost.likes -= 1;
+          cache.writeQuery({
+            query: GET_POST,
+            variables: { postId: this.postId },
+            data
+          });
+        }
+      }).then(({ data }) => {
+        this.loadingLike = false;
+        const updatedUser = { ...this.user, favorites: data.unlikePost.favorites };
+        this.$store.commit('setUser', updatedUser);
+      }).catch(err => {
+        this.loadingLike = false;
+        console.error(err);
+      });
     },
   },
 }

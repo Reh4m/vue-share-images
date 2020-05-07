@@ -1,12 +1,12 @@
 const usersResolvers = require('./users');
 const postsResolvers = require('./posts');
 const postsMessagesResolvers = require('./messages');
+const likePostResolvers = require('./likePost');
 const scalarDate = require('../scalarDate');
 
 module.exports = {
   Post: {
-    messageCount: parent => parent.messages.length,
-    likeCount: parent => parent.likes.length
+    messageCount: parent => parent.messages.length
   },
   Query: {
     ...usersResolvers.Query,
@@ -17,6 +17,7 @@ module.exports = {
   Mutation: {
     ...usersResolvers.Mutation,
     ...postsResolvers.Mutation,
-    ...postsMessagesResolvers.Mutation
+    ...postsMessagesResolvers.Mutation,
+    ...likePostResolvers.Mutation
   }
 };

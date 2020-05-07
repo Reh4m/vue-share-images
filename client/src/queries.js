@@ -42,8 +42,8 @@ export const GET_POST = gql`
 `;
 
 export const GET_POSTS_BY_TAG = gql`
-  query($tag: String!, $orderBy: PostsOrderByInput) {
-    getPostsByTag(tag: $tag, orderBy: $orderBy) {
+  query($tag: String!, $sort: SortInput) {
+    getPostsByTag(tag: $tag, sort: $sort) {
       _id
       ...PostFields
       createdDate
@@ -85,7 +85,7 @@ export const GET_CURRENT_USER = gql`
         imageUrl
         createdDate
         messageCount
-        likeCount
+        likes
       }
     }
   }
@@ -125,11 +125,11 @@ export const GET_USER_POSTS = gql`
 `;
 
 export const INFINITE_SCROLL_POSTS = gql`
-  query($pageNum: Int!, $pageSize: Int!, $orderBy: PostsOrderByInput) {
+  query($pageNum: Int!, $pageSize: Int!, $sort: SortInput) {
     infiniteScrollPosts(
       pageNum: $pageNum
       pageSize: $pageSize
-      orderBy: $orderBy
+      sort: $sort
     ) {
       hasMore
       posts {
@@ -241,14 +241,7 @@ export const DELETE_USER_MESSAGE = gql`
 export const LIKE_POST = gql`
   mutation($postId: ID!, $username: String!) {
     likePost(postId: $postId, username: $username) {
-      post {
-        _id
-        likes {
-          _id
-          username
-        }
-        likeCount
-      }
+      likes
       favorites {
         _id
         title
@@ -258,6 +251,18 @@ export const LIKE_POST = gql`
   }
 `;
 
+export const UNLIKE_POST = gql`
+  mutation($postId: ID!, $username: String!) {
+    unlikePost(postId: $postId, username: $username) {
+      likes
+      favorites {
+        _id
+        title
+        imageUrl
+      }
+    }
+  }
+`;
 // user Mutations
 export const SIGNIN_USER = gql`
   mutation($username: String!, $password: String!) {

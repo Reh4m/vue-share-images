@@ -35,11 +35,11 @@
               </v-btn>
             </template>
             <v-list>
-              <v-list-item-group color="#FF6B6B" mandatory v-model="orderBy">
+              <v-list-item-group color="#FF6B6B" mandatory v-model="sortModel">
                 <v-list-item
-                  v-for="(item, index) in sortItems"
+                  v-for="(item, index) in sortPostsItems"
                   :key="index"
-                  @click="sortPostsBy(item.sortBy, item.prop)"
+                  @click="sortPosts(item.by, item.order)"
                 >
                   <v-list-item-content>
                     <v-list-item-title>
@@ -61,57 +61,7 @@
         :sm="mozaicLayout && index % 3 === 0 ? 12 : 6"
       >
         <v-skeleton-loader type="card" :loading="refetchPosts">
-          <v-card hover flat>
-            <v-img
-              v-ripple="{ center: false }"
-              height="30vh"
-              @click="goToId('posts', post._id)"
-              :src="post.imageUrl"
-            ></v-img>
-
-            <v-list-group :value="false" :ripple="false">
-              <template v-slot:activator>
-                <v-list-item-content class="my-2">
-                  <v-list-item-title>
-                    <span class="caption darklighten--text font-weight-bold">
-                      {{ post.title }}
-                    </span>
-                  </v-list-item-title>
-                  <v-list-item-subtitle>
-                    <span class="caption greylighten--text font-weight-bold">
-                      {{ post.likeCount }} Likes • {{ post.messageCount }} Comments
-                    </span>
-                  </v-list-item-subtitle>
-                </v-list-item-content>
-              </template>
-
-              <v-list-item
-                class="greylightenfive"
-                @click="goToId('profile', post.createdBy._id)"
-              >
-                <v-list-item-avatar size="30">
-                  <img :src="post.createdBy.avatar" />
-                </v-list-item-avatar>
-                <v-list-item-content>
-                  <v-list-item-title>
-                    <span
-                      class="
-                      caption text-capitalize
-                      darklighten--text font-weight-bold
-                    "
-                    >
-                      By {{ post.createdBy.name }}
-                    </span>
-                  </v-list-item-title>
-                  <v-list-item-subtitle>
-                    <span class="caption font-weight-bold">
-                      Added {{ formatCreatedDate(post.createdDate) }}
-                    </span>
-                  </v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list-group>
-          </v-card>
+          <PostCard :post="post" />
         </v-skeleton-loader>
       </v-col>
     </v-row>
@@ -143,15 +93,15 @@ export default {
     pageNum: 1,
     isPageBottom: false,
     mozaicLayout: false,
-    sortItems: [
-      { title: "Newest (default)", sortBy: 'createdDate', prop: 'desc'},
-      { title: "Oldest", sortBy: 'createdDate', prop:  'asc' },
-      { title: "Most likes", sortBy: 'likes', prop: 'desc' },
-      { title: "Least likes", sortBy: 'likes', prop: 'asc' },
-      { title: "Alphabetical (A-Z)", sortBy: 'title', prop: 'asc' },
-      { title: "Alphabetical (Z-A)", sortBy: 'title', prop: 'desc' }
+    sortPostsItems: [
+      { title: "Newest (default)", by: 'createdDate', order: 'desc'},
+      { title: "Oldest", by: 'createdDate', order:  'asc' },
+      { title: "Most likes", by: 'likes', order: 'desc' },
+      { title: "Least likes", by: 'likes', order: 'asc' },
+      { title: "Alphabetical (A-Z)", by: 'title', order: 'asc' },
+      { title: "Alphabetical (Z-A)", by: 'title', order: 'desc' }
     ],
-    orderBy: 0,
+    sortModel: 0,
     refetchPosts: false
   }),
   apollo: {
@@ -160,7 +110,7 @@ export default {
       variables: {
         pageNum: 1,
         pageSize,
-        orderBy: 'createdDate_desc'
+        sort: {by: 'createdDate', order: 'desc'}
       }
     }
   },
@@ -179,14 +129,14 @@ export default {
   },
   methods: {
     // sorting posts list by value
-    sortPostsBy(value, prop) {
+    sortPosts(by, order) {
       this.refetchPosts = true;
       this.$apollo.queries.infiniteScrollPosts.refetch({
         pageNum: 1,
         pageSize,
-        orderBy: `${value}_${prop}`
+        sort: {by, order}
       })
-      .then(data => {
+      .then(() => {
         this.refetchPosts = false;
       })
       .catch(err => {
@@ -194,10 +144,6 @@ export default {
         console.error(err);
       });
     },
-    goToId(route, id) {
-      this.$router.push(`/${route}/${id}`);
-    },
-    formatCreatedDate: date => moment(date).format('LL'),
     onScroll() {
       this.checkIfPageBottom();
     },

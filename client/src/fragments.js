@@ -8,7 +8,7 @@ export const fragments = {
       description
       categories
       messageCount
-      likeCount
+      likes
     }
   `,
 };

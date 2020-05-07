@@ -42,11 +42,11 @@
               </v-btn>
             </template>
             <v-list>
-              <v-list-item-group color="#FF6B6B" mandatory v-model="orderBy">
+              <v-list-item-group color="#FF6B6B" mandatory v-model="sortModel">
                 <v-list-item
-                  v-for="(item, index) in sortItems"
+                  v-for="(item, index) in sortPostsItems"
                   :key="index"
-                  @click="sortPostsBy(item.sortBy, item.prop)"
+                  @click="sortPostsBy(item.by, item.order)"
                 >
                   <v-list-item-content>
                     <v-list-item-title>
@@ -62,14 +62,13 @@
 
       <!-- posts card -->
       <v-col
-        v-for="post in getPostsByTag"
+        v-for="(post, index) in getPostsByTag"
         :key="post._id"
         cols="12"
         :sm="mozaicLayout && index % 3 === 0 ? 12 : 6"
-        :md="mozaicLayout ? 6 : 4"
       >
         <v-skeleton-loader :loading="refetchPosts" type="card-avatar">
-          <PostCard :post="post"/>
+          <PostCard :post="post" />
         </v-skeleton-loader>
       </v-col>
     </v-row>
@@ -93,13 +92,13 @@ export default {
     getTag: '',
     pageNum: 1,
     mozaicLayout: false,
-    sortItems: [
-      { title: "Newest (default)", sortBy: 'createdDate', prop: 'desc'},
-      { title: "Oldest", sortBy: 'createdDate', prop:  'asc' },
-      { title: "Most likes", sortBy: 'likes', prop: 'desc' },
-      { title: "Least likes", sortBy: 'likes', prop: 'asc' }
+    sortPostsItems: [
+      { title: "Newest (default)", by: 'createdDate', order: 'desc'},
+      { title: "Oldest", by: 'createdDate', order:  'asc' },
+      { title: "Most likes", by: 'likes', order: 'desc' },
+      { title: "Least likes", by: 'likes', order: 'asc' }
     ],
-    orderBy: 0,
+    sortModel: 0,
     refetchPosts: false
   }),
   apollo: {
@@ -108,7 +107,7 @@ export default {
       variables() {
         return {
           tag: this.tag,
-          orderBy: 'createdDate_desc'
+          sort: {by: 'createdDate', order: 'desc'}
         }
       },
       error(err) {
@@ -118,13 +117,13 @@ export default {
   },
   methods: {
     // sorting posts list by value
-    sortPostsBy(prop, value) {
+    sortPostsBy(by, order) {
       this.refetchPosts = true;
       this.$apollo.queries.getPostsByTag.refetch({
         tag: this.tag,
-        orderBy: `${prop}_${value}`
+        sort: {by, order}
       })
-      .then(data => {
+      .then(() => {
         this.refetchPosts = false;
       })
       .catch(err => {

@@ -13,7 +13,6 @@ import {
   UPDATE_USER_POST,
   DELETE_USER_POST,
   INFINITE_SCROLL_POSTS,
-  LIKE_POST
 } from "../queries";
 
 Vue.use(Vuex)
@@ -116,25 +115,6 @@ export default new Vuex.Store({
         console.error(err)
       });
     },
-    likePost: ({ state, commit }, payload) => {
-      commit('setLoading', true);
-      apolloClient
-      .mutate({
-        mutation: LIKE_POST,
-        variables: payload
-      })
-      .then(({ data }) => {
-        commit('setLoading', false);
-        // remove/add post to user favorites
-        const updatedUser = {
-          ...state.user, favorites: data.likePost.favorites
-        };
-        commit('setUser', updatedUser);
-      }).catch(err => {
-        commit('setLoading', false);
-        console.error(err);
-      });
-    },
     addPost: ({ state, commit }, payload) => {
       commit('setLoading', true);
       apolloClient
@@ -168,7 +148,7 @@ export default new Vuex.Store({
             variables: {
               pageNum: 1,
               pageSize: 4,
-              orderBy: 'createdDate_desc'
+              sort: {by: 'createdDate', order: 'desc'}
             }
           },
           {
@@ -220,7 +200,7 @@ export default new Vuex.Store({
             variables: {
               pageNum: 1,
               pageSize: 4,
-              orderBy: 'createdDate_desc'
+              sort: {by: 'createdDate', order: 'desc'}
             }
           },{
             query: GET_USER_POSTS,

@@ -1,20 +1,3 @@
-
-const handleSortPostsBy = orderBy => {
-  let sortBy;
-  const prop = orderBy.includes('desc') ? 'desc' : 'asc'
-  switch (prop) {
-    case 'desc':
-      sortBy = orderBy.replace('_desc', '');
-      break;
-    case 'asc':
-      sortBy = orderBy.replace('_asc', '');
-      break;
-  }
-  return {
-    sortBy, prop
-  }
-};
-
 module.exports = {
   Query: {
     getPosts: async (_, args, { Post }) => {
@@ -35,15 +18,13 @@ module.exports = {
       return posts;
     },
     infiniteScrollPosts: async (
-      _, { pageNum, pageSize, orderBy }, { Post }
+      _, { pageNum, pageSize, sort }, { Post }
     ) => {
-      // get sort value by the user
-      const sortPostsBy = handleSortPostsBy(orderBy);
       let posts;
       if (pageNum === 1) {
         posts = await Post.find({})
           // dynamic posts sorting by different values
-        .sort({ [sortPostsBy.sortBy]: sortPostsBy.prop })
+        .sort({ [sort.by]: sort.order })
           .populate({
             path: "createdBy",
             model: "User"
@@ -54,7 +35,7 @@ module.exports = {
         // figure out how many documents to skip
         const skips = pageSize * (pageNum - 1);
         posts = await Post.find({})
-          .sort({ [sortPostsBy.sortBy]: sortPostsBy.prop })
+          .sort({ [sort.by]: sort.order })
           .populate({
             path: "createdBy",
             model: "User"
@@ -69,23 +50,21 @@ module.exports = {
     getPost: async (_, { postId }, { Post }) => {
       try {
         const post = await Post.findOne({ _id: postId })
-        .populate({
-          path: "messages.messageUser createdBy",
-          model: "User"
-        });
+          .populate({
+            path: "messages.messageUser createdBy",
+            model: "User"
+          });
         return post;
       } catch(err) {
         throw new Error('Post not found');
       }
     },
-    getPostsByTag: async (_, { tag, orderBy }, { Post }) => {
-      // get sort value by the user
-      const sortPostsBy = handleSortPostsBy(orderBy);
+    getPostsByTag: async (_, { tag, sort }, { Post }) => {
       const posts = await Post.find({
         categories: tag
       })
         // dynamic posts sorting by different values
-        .sort({ [sortPostsBy.sortBy]: sortPostsBy.prop })
+        .sort({ [sort.by]: sort.order })
         .populate({
           path: "createdBy",
           model: "User"
@@ -105,11 +84,11 @@ module.exports = {
         // sort results acconding to that textScore
         // (as well as by likes in descending order)
       )
-      .sort({
-        score: { $meta: "textScore" },
-        likes: "desc"
-      })
-      .limit(5);
+        .sort({
+          score: { $meta: "textScore" },
+          likes: "desc"
+        })
+        .limit(5);
       return searchResults;
     }
   },
@@ -137,40 +116,6 @@ module.exports = {
     deleteUserPost: async (_, { postId }, { Post }) => {
       const post = await Post.findOneAndRemove({ _id: postId });
       return post;
-    },
-    likePost: async (_, { postId, username }, { Post, User }) => {
-      const post = await Post.findById(postId);
-      let user;
-      if (post.likes.find(like => like.username === username)) {
-        // post already like, unlike it
-        post.likes = post.likes.filter(like => like.username !== username);
-        // find user, remove id of post from its favorites array
-        // (whitch will be populate as posts)
-        user = await User.findOneAndUpdate(
-          { username },
-          { $pull: { favorites: postId } },
-          { new: true }
-        ).populate({
-          path: "favorites",
-          model: "Post"
-        });
-      } else {
-        // not liked, like post and add to user favorites
-        post.likes.push({ username });
-        // find user, add id at post to its favorites array
-        // (whitch will be populate as posts)
-        user = await User.findOneAndUpdate(
-          { username },
-          { $addToSet: { favorites: postId } },
-          { new: true }
-        ).populate({
-          path: "favorites",
-          model: "Post"
-        });
-      };
-      await post.save();
-      // return only likes from 'post' and favorites from 'user'
-      return { post, favorites: user.favorites };
     },
     addPost: async (
       _,

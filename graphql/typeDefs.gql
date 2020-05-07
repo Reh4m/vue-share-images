@@ -1,4 +1,3 @@
-
 scalar Date
 
 type User {
@@ -19,9 +18,8 @@ type Post {
   categories: [String]!
   description: String!
   createdDate: Date
-  likes: [Like]
+  likes: Int
   messageCount: Int!
-  likeCount: Int!
   createdBy: User!
   messages: [Message]
 }
@@ -33,30 +31,20 @@ type Message {
   messageUser: User!
 }
 
-type Like {
-  _id: ID,
-  createdDate: String,
-  username: String
-}
-
 type PostsPage {
   posts: [Post]
   hasMore: Boolean
 }
 
-enum PostsOrderByInput {
-  createdDate_asc
-  createdDate_desc
-  title_asc
-  title_desc
-  likes_asc
-  likes_desc
+# likes for posts / favorites for user
+type LikesFaves {
+  likes: Int
+  favorites: [Post]
 }
 
-# likes for posts / favorites for user
-type likesFaves {
-  post: Post!
-  favorites: [Post]
+input SortInput {
+  by: String
+  order: String
 }
 
 type Query {
@@ -65,12 +53,12 @@ type Query {
   getPosts: [Post]
   getUserPosts(userId: ID!): [Post]
   getPost(postId: ID!): Post!
-  getPostsByTag(tag: String!, orderBy: PostsOrderByInput): [Post]
+  getPostsByTag(tag: String!, sort: SortInput): [Post]
   searchPosts(searchTerm: String): [Post]
   infiniteScrollPosts(
-    pageNum: Int!, 
-    pageSize: Int!, 
-    orderBy: PostsOrderByInput
+    pageNum: Int!,
+    pageSize: Int!,
+    sort: SortInput
   ): PostsPage
 }
 
@@ -98,12 +86,13 @@ type Mutation {
   ): Post!
   updateUserBanner(userId: ID!, banner: String!): User!
   deleteUserPost(postId: ID!): Post!
-  likePost(postId: ID!, username: String!): likesFaves!
+  likePost(postId: ID!, username: String!): LikesFaves!
+  unlikePost(postId: ID!, username: String!): LikesFaves!
   signinUser(username: String!, password: String!): Token
   signupUser(
-    username: String!, 
-    name: String!, 
-    email: String!, 
+    username: String!,
+    name: String!,
+    email: String!,
     password: String!
   ): Token
 }
