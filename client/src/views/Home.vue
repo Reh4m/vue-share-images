@@ -1,16 +1,16 @@
 <template>
   <v-container>
     <!-- loading spinner -->
-    <v-overlay v-model="loading">
+    <v-overlay absolute v-model="loading">
       <v-progress-circular indeterminate size="64"/>
     </v-overlay>
 
-    <v-row 
-      class="text-center" 
-      justify="center" 
+    <!-- posts carousel -->
+    <v-row
+      class="text-center"
+      justify="center"
       v-if="!loading && posts.length > 0"
     >
-      <!-- posts carousel -->
       <v-col cols="12">
         <v-carousel
           cycle

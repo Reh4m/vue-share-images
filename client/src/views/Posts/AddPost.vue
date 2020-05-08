@@ -1,10 +1,12 @@
 <template lang="html">
-  <v-container fluid>
+  <v-container>
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6">
-        <v-card flat class="transparent">
-          <h1 class="darklighten--text text-center">New Post</h1>
-          <v-container>
+        <v-card flat class="text-center transparent">
+          <v-card-text class="display-1 font-weight-bold">
+            New Post
+          </v-card-text>
+          <v-card-text>
             <v-form v-model="isFormValid" lazy-validation ref="form">
               <!-- image url input -->
               <v-text-field
@@ -89,7 +91,7 @@
                 </v-btn>
               </v-layout>
             </v-form>
-          </v-container>
+          </v-card-text>
         </v-card>
       </v-col>
     </v-row>
@@ -119,8 +121,8 @@ export default {
     ],
     titleRules: [
       title => !!title || "Title is required",
-      title => 
-        (title && title.length <= 30) || 
+      title =>
+        (title && title.length <= 30) ||
         "Title must have less than 30 characters"
     ],
     imageRules: [
@@ -132,8 +134,8 @@ export default {
     ],
     descriptonRules: [
       desc => !!desc || "Description is required",
-      desc => 
-        (desc && desc.length <= 200) || 
+      desc =>
+        (desc && desc.length <= 200) ||
         "Description must have less than 200 characters"
     ]
   }),

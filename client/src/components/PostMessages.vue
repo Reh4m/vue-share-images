@@ -1,10 +1,6 @@
 <template>
   <v-col cols="12">
     <v-card flat :loading="loadingDeleteMessage">
-      <v-subheader class="caption darklighten--text">
-        {{ messages.length }}
-        {{ messages.length === 1 ? 'Message' : 'Messages' }}
-      </v-subheader>
       <!-- message input -->
       <template v-if="user">
         <v-list-item>
@@ -49,25 +45,23 @@
 
       <!-- messages -->
       <v-list three-line>
+        <v-subheader class="caption darklighten--text">
+          {{ messages.length }} Messages
+        </v-subheader>
         <div v-if="messages.length">
           <v-list-item v-for="(message, index) in messages" :key="message._id">
-            <v-list-item-avatar v-ripple>
+            <v-list-item-avatar
+              v-ripple
+              @click="goToUserProfile(message.messageUser._id)"
+              style="cursor: pointer;"
+            >
               <v-img :src="message.messageUser.avatar" />
             </v-list-item-avatar>
 
             <v-list-item-content>
               <v-list-item-title class="caption">
                 <span class="font-weight-bold">
-                  <router-link
-                    :class="
-                      checkIfOwnMessage(message)
-                        ? 'indigo--text'
-                        : 'primary--text'
-                    "
-                    :to="`/profile/${message.messageUser._id}`"
-                  >
-                    {{ message.messageUser.name }}
-                  </router-link>
+                  {{ message.messageUser.name }}
                 </span>
               </v-list-item-title>
               <v-list-item-subtitle class="caption darklighten--text">
@@ -79,22 +73,12 @@
             </v-list-item-content>
 
             <v-list-item-action v-if="checkIfOwnMessage(message)">
-              <v-menu left transition="scroll-y-transition">
-                <template v-slot:activator="{ on }">
-                  <v-btn icon color="primary" v-on="on">
-                    <v-icon>mdi-dots-vertical</v-icon>
-                  </v-btn>
-                </template>
-                <v-list>
-                  <v-list-item
-                    @click="handleDeleteUserMessage(message._id, index)"
-                  >
-                    <v-list-item-content>
-                      <v-list-item-title>Delete</v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
+              <v-btn
+                icon
+                @click="handleDeleteUserMessage(message._id, index)"
+              >
+                <v-icon>mdi-delete-outline</v-icon>
+              </v-btn>
             </v-list-item-action>
           </v-list-item>
         </div>
@@ -120,17 +104,12 @@ export default {
     postId: String
   },
   data: () => ({
-    postLiked: false,
-    imageDialog: false,
     messageBody: '',
     isFormValid: true,
-    messageError: '',
-    signinRequired: false,
     messageRules: [
       messageBody =>
-        messageBody.length < 100 || 'Message must be less than 200 characters'
+        messageBody.length < 200 || 'Message must be less than 200 characters'
     ],
-    loadingLike: false,
     loadingMessage: false,
     loadingDeleteMessage: false
   }),
@@ -138,6 +117,9 @@ export default {
     ...mapGetters(['user']),
   },
   methods: {
+    goToUserProfile(userId) {
+      this.$router.push(`/profile/${userId}`);
+    },
     getTimeFromNow: time => moment(time).fromNow(),
     handleAddPostMessage() {
       if (

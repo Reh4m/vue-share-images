@@ -132,7 +132,8 @@ export default new Vuex.Store({
             data
           });
         },
-        // optimistic response ensures dara is added inmediately as we specified for the update function
+        // optimistic response ensures dara is added inmediately
+        // as we specified for the update function
         optimisticResponse: {
           __typename: 'Mutation',
           addPost: {
@@ -141,7 +142,8 @@ export default new Vuex.Store({
             ...payload
           }
         },
-        // return specified queriesafter perfoming the mutation in oder to get fresh data
+        // return specified queries after perfoming the mutation
+        // in oder to get fresh data
         refetchQueries: [
           {
             query: INFINITE_SCROLL_POSTS,
@@ -237,7 +239,8 @@ export default new Vuex.Store({
         .then(({ data }) => {
           commit('setLoading', false);
           localStorage.setItem('token', data.signinUser.token);
-          // to make sure created methods is run in main.js (we run getCurrentUser), reload the page
+          // to make sure created methods is run in main.js
+          // (we run getCurrentUser), reload the page
           router.go();
         })
         .catch(err => {
@@ -258,7 +261,8 @@ export default new Vuex.Store({
         .then(({ data }) => {
           commit('setLoading', true);
           localStorage.setItem('token', data.signupUser.token);
-          // to make sure created methods is run in main.js (we run getCurrentUser), reload the page
+          // to make sure created methods is run in main.js
+          // (we run getCurrentUser), reload the page
           router.go();
         })
         .catch(err => {

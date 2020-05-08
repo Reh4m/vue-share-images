@@ -9,11 +9,8 @@ import ApolloClient from 'apollo-boost';
 import VueApollo from 'vue-apollo';
 
 // global components
-import AuthAlert from './components/AuthAlert';
-Vue.component('AuthAlert', AuthAlert);
-
-import SigninRequired from './components/SigninRequired';
-Vue.component('SigninRequired', SigninRequired);
+import SigninRequiredCard from './components/SigninRequiredCard';
+Vue.component('SigninRequiredCard', SigninRequiredCard);
 
 import QueryProgress from './components/QueryProgress';
 Vue.component('QueryProgress', QueryProgress);
@@ -29,7 +26,7 @@ Vue.use(ErrorPage);
 Vue.use(VueApollo);
 
 export const defaultClient = new ApolloClient({
-  uri: 'https://share-images-reh4m.herokuapp.com/graphql',
+  uri: 'http://localhost:4000/graphql',
   // include auth token with request made to backend
   fetchOptions: {
     credentials: 'include'

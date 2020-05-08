@@ -1,6 +1,6 @@
 <template lang="html">
   <v-container fluid>
-    <v-row align="center" justify="center">
+    <v-row justify="center">
       <v-col cols="12" sm="8" md="4">
         <v-card flat class="text-center" :loading="loading">
           <v-card-text>

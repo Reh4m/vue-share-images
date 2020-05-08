@@ -17,13 +17,8 @@
             </v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title>
-                <span class="body-2 font-weight-bold">
-                  <router-link
-                    class="info--text"
-                    :to="`/profile/${getPost.createdBy._id}`"
-                  >
+                <span class="body-2 darklighten--text font-weight-bold">
                     {{ getPost.createdBy.name }}
-                  </router-link>
                 </span>
               </v-list-item-title>
               <v-list-item-subtitle>
@@ -72,9 +67,9 @@
             {{ getPost.description }}
           </v-card-text>
 
-          <!-- actions -->
           <v-list-item class="py-0 greylightenfive">
             <v-list-item-title>
+              <!-- tags -->
               <v-chip-group show-arrows>
                 <v-chip
                   v-for="(category, index) in getPost.categories"
@@ -89,35 +84,9 @@
                 </v-chip>
               </v-chip-group>
             </v-list-item-title>
+              <!-- like button component -->
             <v-list-item-action>
-              <div v-if="user">
-                <v-btn
-                  v-if="checkIfPostLiked(getPost._id)"
-                  text color="#E57373"
-                  @click="handleUnlikePost()"
-                  :loading="loadingLike"
-                >
-                  <v-icon left>mdi-heart</v-icon>
-                  {{ getPost.likes }}
-                </v-btn>
-                <v-btn
-                  v-else
-                  text color="#707070"
-                  @click="handleLikePost()"
-                  :loading="loadingLike"
-                >
-                  <v-icon left>mdi-heart-outline</v-icon>
-                  {{ getPost.likes }}
-                </v-btn>
-              </div>
-              <div v-else>
-                <v-btn text color="#707070" @click="signinRequired = true">
-                  <v-icon left>mdi-heart-outline</v-icon>
-                  <span class="primary--text">
-                    {{ getPost.likeCount }}
-                  </span>
-                </v-btn>
-              </div>
+              <LikeButton :postId="getPost._id" :likes="getPost.likes" />
             </v-list-item-action>
           </v-list-item>
         </v-card>
@@ -125,25 +94,17 @@
 
       <!-- messages component -->
       <PostMessages :messages="getPost.messages" :postId="postId" />
-
-      <SigninRequired
-        :dialog.sync="signinRequired"
-        @closeDialog="closeDialog"
-      />
     </v-row>
   </v-container>
 </template>
 
 <script>
 import moment from 'moment'
-import {
-  GET_POST,
-  LIKE_POST,
-  UNLIKE_POST,
-} from '../../queries'
+import { GET_POST } from '../../queries'
 import { mapGetters } from 'vuex'
 import NotFound from '../Errors/NotFound.vue';
 import PostMessages from '../../components/PostMessages.vue';
+import LikeButton from '../../components/LikeButton.vue';
 
 export default {
   name: 'Post',
@@ -151,18 +112,11 @@ export default {
     postId: String
   },
   components: {
-    PostMessages
+    PostMessages,
+    LikeButton
   },
   data: () => ({
     imageDialog: false,
-    messageBody: '',
-    isFormValid: true,
-    signinRequired: false,
-    messageRules: [
-      messageBody =>
-        messageBody.length < 200 || 'Message must be less than 200 characters'
-    ],
-    loadingLike: false
   }),
   apollo: {
     getPost: {
@@ -181,9 +135,6 @@ export default {
     ...mapGetters(['user', 'userFavorites', 'loading'])
   },
   methods: {
-    closeDialog(){
-      this.signinRequired = false;
-    },
     formatCreatedDate: date => moment(new Date(date)).format('LLL'),
     goToUserProfile(userId) {
       this.$router.push(`/profile/${userId}`);

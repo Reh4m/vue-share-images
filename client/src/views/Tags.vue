@@ -46,7 +46,7 @@
                 <v-list-item
                   v-for="(item, index) in sortPostsItems"
                   :key="index"
-                  @click="sortPostsBy(item.by, item.order)"
+                  @click="sortPosts(item.by, item.order)"
                 >
                   <v-list-item-content>
                     <v-list-item-title>
@@ -117,7 +117,7 @@ export default {
   },
   methods: {
     // sorting posts list by value
-    sortPostsBy(by, order) {
+    sortPosts(by, order) {
       this.refetchPosts = true;
       this.$apollo.queries.getPostsByTag.refetch({
         tag: this.tag,

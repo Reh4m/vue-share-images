@@ -233,15 +233,6 @@ export default {
   font-weight: 600;
 }
 
-/* search results card */
-#search__card {
-  position: absolute;
-  width: 100vw;
-  z-index: 8;
-  top: 100%;
-  left: 0%;
-}
-
 /* user favorite animation */
 .bounce {
   animation: bounce 1s both;
