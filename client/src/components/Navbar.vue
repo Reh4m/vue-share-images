@@ -28,7 +28,7 @@
       <v-btn
         text
         large
-        color="#105e62"
+        color="primary"
         class="hidden-xs-only"
         v-for="link in horizontalNavItems"
         :key="link.name"
@@ -44,7 +44,7 @@
         text
         large
         class="hidden-xs-only"
-        color="#105e62"
+        color="primary"
         v-if="user"
         router
         to="/user"
@@ -65,7 +65,7 @@
         text
         large
         class="hidden-xs-only"
-        color="#105e62"
+        color="primary"
         v-if="user"
         @click="handleSignoutUser"
       >
@@ -94,10 +94,9 @@
       </v-toolbar>
 
       <!-- side nav items -->
-      <v-list flat>
+      <v-list shaped>
         <v-list-item
           color="#FF6B6B"
-          active-class="list-item-active"
           v-for="item in sideNavItems"
           :key="item.name"
           link
@@ -114,9 +113,25 @@
       </v-list>
 
       <template v-slot:append>
-        <v-list>
+        <v-list shaped>
+          <v-list-item @click="$vuetify.theme.dark = !$vuetify.theme.dark">
+            <v-list-item-avatar>
+              <v-icon>
+                {{
+                  $vuetify.theme.dark ?
+                  'mdi-brightness-4' : 'mdi-brightness-7'
+                 }}
+              </v-icon>
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title>Theme Dark</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
           <v-list-item v-if="user" @click="handleSignoutUser">
-            <v-list-item-content class="redlighten--text list-item-active">
+            <v-list-item-avatar>
+              <v-icon>mdi-logout-variant</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-content>
               <v-list-item-title>Sign Out</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -131,11 +146,25 @@ import { mapGetters, mapActions, mapState } from "vuex";
 
 export default {
   name: "Navbar",
-  data: () => ({
+  props: {
+    attrs: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
+  data: vm => ({
+    initialDark: vm.$vuetify
+      ? vm.$vuetify.theme.dark
+      : false,
     drawer: null,
     badgeAnimated: false,
     searchTerm: ''
   }),
+  beforeDestroy () {
+    if (!this.$vuetify) return
+
+    this.$vuetify.theme.dark = this.initialDark
+  },
   methods: {
     ...mapActions(["signoutUser"]),
     goToSearchPage() {

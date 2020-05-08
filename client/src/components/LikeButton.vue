@@ -12,7 +12,7 @@
       </v-btn>
       <v-btn
         v-else
-        text color="#707070"
+        text
         @click="handleLikePost()"
         :loading="loadingLike"
       >
@@ -21,9 +21,9 @@
       </v-btn>
     </div>
     <div v-else>
-      <v-btn text color="#707070" @click="signinRequired = true">
+      <v-btn text @click="signinRequired = true">
         <v-icon left>mdi-heart-outline</v-icon>
-        <span class="primary--text">
+        <span>
           {{ likes }}
         </span>
       </v-btn>

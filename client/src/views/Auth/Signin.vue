@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-row justify="center">
       <v-col cols="12" sm="8" md="4">
-        <v-card flat class="text-center" :loading="loading">
+        <v-card flat class="text-center">
           <v-card-text>
             <span class="display-1 font-weight-bold">
               Welcome Back
