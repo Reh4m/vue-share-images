@@ -19,10 +19,10 @@ import PostCard from './components/PostCard';
 Vue.component('PostCard', PostCard);
 
 // layout settings
-import LayoutButtons from './components/LayoutButtons';
+import LayoutButtons from './components/Layout/LayoutButtons';
 Vue.component('LayoutButtons', LayoutButtons);
 
-import PostsOrderMenu from './components/PostsOrderMenu';
+import PostsOrderMenu from './components/Layout/PostsOrderMenu';
 Vue.component('PostsOrderMenu', PostsOrderMenu);
 
 // errors page
