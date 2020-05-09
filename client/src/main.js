@@ -18,6 +18,13 @@ Vue.component('QueryProgress', QueryProgress);
 import PostCard from './components/PostCard';
 Vue.component('PostCard', PostCard);
 
+// layout settings
+import LayoutButtons from './components/LayoutButtons';
+Vue.component('LayoutButtons', LayoutButtons);
+
+import PostsOrderMenu from './components/PostsOrderMenu';
+Vue.component('PostsOrderMenu', PostsOrderMenu);
+
 // errors page
 window.eventBus = new Vue();
 Vue.use(ErrorPage);
@@ -26,7 +33,7 @@ Vue.use(ErrorPage);
 Vue.use(VueApollo);
 
 export const defaultClient = new ApolloClient({
-  uri: 'https://share-images-reh4m.herokuapp/graphql',
+  uri: 'https://share-images-reh4m.herokuapp.com/graphql',
   // include auth token with request made to backend
   fetchOptions: {
     credentials: 'include'

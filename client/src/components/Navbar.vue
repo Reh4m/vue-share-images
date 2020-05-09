@@ -84,15 +84,6 @@
 
     <!-- sidenav -->
     <v-navigation-drawer v-model="drawer" app temporary>
-      <v-toolbar color="primary" dark>
-        <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-        <router-link class="white--text" to="/">
-          <v-btn text large>
-            Schooldevs
-          </v-btn>
-        </router-link>
-      </v-toolbar>
-
       <!-- side nav items -->
       <v-list shaped>
         <v-list-item
