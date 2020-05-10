@@ -65,7 +65,9 @@ export default {
       variables() {
         return {
           tag: this.tag,
-          sort: {by: 'createdDate', order: 'desc'}
+          sort: {
+            by: 'createdDate', order: 'desc'
+          }
         };
       },
       error(err) {

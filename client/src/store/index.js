@@ -90,7 +90,7 @@ export default new Vuex.Store({
       apolloClient
         .query({
           query: GET_POSTS
-        }).then(({data}) => {
+        }).then(({ data }) => {
           // get data from actions to state via mutations
           // commit passes data from actions along to mutations functions
           commit('setPosts', data.getPosts);
@@ -150,7 +150,9 @@ export default new Vuex.Store({
             variables: {
               pageNum: 1,
               pageSize: 4,
-              sort: {by: 'createdDate', order: 'desc'}
+              sort: {
+                by: 'createdDate', order: 'desc'
+              }
             }
           },
           {
@@ -161,7 +163,7 @@ export default new Vuex.Store({
           }
         ]
       })
-      .then(({ data }) => {
+      .then(() => {
         commit('setLoading', false);
         router.push('/');
       })
@@ -202,7 +204,9 @@ export default new Vuex.Store({
             variables: {
               pageNum: 1,
               pageSize: 4,
-              sort: {by: 'createdDate', order: 'desc'}
+              sort: {
+                by: 'createdDate', order: 'desc'
+              }
             }
           },{
             query: GET_USER_POSTS,

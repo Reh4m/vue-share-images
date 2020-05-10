@@ -124,7 +124,7 @@ export default {
       variables() {
         return {
           postId: this.postId
-        }
+        };
       },
       error(err) {
         this.$_error(NotFound, { message: err.message });

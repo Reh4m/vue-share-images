@@ -60,7 +60,7 @@ export default {
       variables() {
         return {
           userId: this.userId
-        }
+        };
       },
       error(err) {
         this.$_error(NotFound, { message: err.message });
