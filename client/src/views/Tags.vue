@@ -66,7 +66,7 @@ export default {
         return {
           tag: this.tag,
           sort: {by: 'createdDate', order: 'desc'}
-        }
+        };
       },
       error(err) {
         this.$_error(NotFound, { message: err.message });
@@ -82,7 +82,7 @@ export default {
       this.refetchPosts = true;
       this.$apollo.queries.getPostsByTag.refetch({
         tag: this.tag,
-        sort: {by, order}
+        sort: { by, order }
       })
       .then(() => {
         this.refetchPosts = false;

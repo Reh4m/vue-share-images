@@ -64,10 +64,14 @@ export default {
   apollo: {
     infiniteScrollPosts: {
       query: INFINITE_SCROLL_POSTS,
-      variables: {
-        pageNum: 1,
-        pageSize,
-        sort: {by: 'createdDate', order: 'desc'}
+      variables() {
+        return {
+          pageNum: 1,
+          pageSize,
+          sort: {
+            by: 'createdDate', order: 'desc'
+          }
+        };
       }
     }
   },
@@ -91,10 +95,12 @@ export default {
     // sorting posts list by value
     sortPosts(by, order) {
       this.refetchPosts = true;
+      // restore page num
+      this.pageNum = 1;
       this.$apollo.queries.infiniteScrollPosts.refetch({
-        pageNum: 1,
+        pageNum: this.pageNum,
         pageSize,
-        sort: {by, order}
+        sort: { by, order }
       })
       .then(() => {
         this.refetchPosts = false;
@@ -116,7 +122,7 @@ export default {
       this.isPageBottom = scrolledToBottom;
     },
     showMorePosts() {
-      this.pageNum += 1;
+      this.pageNum ++;
       // fetch more data and transform original result
       this.$apollo.queries.infiniteScrollPosts.fetchMore({
         variables: {
