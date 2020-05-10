@@ -9,6 +9,9 @@ import ApolloClient from 'apollo-boost';
 import VueApollo from 'vue-apollo';
 
 // global components
+import AuthAlert from './components/AuthAlert';
+Vue.component('AuthAlert', AuthAlert);
+
 import SigninRequiredCard from './components/SigninRequiredCard';
 Vue.component('SigninRequiredCard', SigninRequiredCard);
 

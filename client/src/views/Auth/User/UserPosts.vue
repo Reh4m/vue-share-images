@@ -60,7 +60,7 @@
             </span>
           </v-card-title>
           <v-card-subtitle>
-            <span class="caption greylighten--text font-weight-bold">
+            <span class="caption font-weight-bold">
               {{ post.likes }} Likes •
               {{ post.messageCount }} Messages
             </span>

@@ -25,7 +25,9 @@
         :sm="mozaicLayout && index % 3 === 0 ? 12 : 6"
       >
         <v-skeleton-loader type="card" :loading="refetchPosts">
-          <PostCard :post="post" />
+          <PostCard :post="post">
+            <v-img :src="post.createdBy.avatar" />
+          </PostCard>
         </v-skeleton-loader>
       </v-col>
     </v-row>

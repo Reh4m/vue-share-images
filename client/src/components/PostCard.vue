@@ -6,16 +6,23 @@
       v-ripple
       @click="goToPost(post._id)"
     />
-    <v-card-title>
-      <span class="caption font-weight-bold">
-        {{ post.title }}
-      </span>
-    </v-card-title>
-    <v-card-subtitle>
-      <span class="caption font-weight-bold">
-        {{ post.likes }} Likes • {{ post.messageCount }} Messages
-      </span>
-    </v-card-subtitle>
+    <v-list-item>
+      <v-list-item-avatar v-if="post.createdBy" size="30">
+        <slot></slot>
+      </v-list-item-avatar>
+      <v-list-item-content>
+        <v-list-item-title>
+          <span class="caption darklighten--text font-weight-bold">
+            {{ post.title }}
+          </span>
+        </v-list-item-title>
+        <v-list-item-subtitle>
+          <span class="caption font-weight-bold">
+            {{ post.likes }} Likes • {{ post.messageCount }} Messages
+          </span>
+        </v-list-item-subtitle>
+      </v-list-item-content>
+    </v-list-item>
   </v-card>
 </template>
 
