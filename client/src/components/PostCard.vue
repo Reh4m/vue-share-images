@@ -1,13 +1,14 @@
 <template>
   <v-card flat hover>
-    <v-img
-      height="30vh"
-      :src="post.imageUrl"
-      v-ripple
-      @click="goToPost(post._id)"
-    />
+    <router-link :to="`/posts/${post._id}`">
+      <v-img
+        height="30vh"
+        :src="post.imageUrl"
+        v-ripple
+      />
+    </router-link>
     <v-list-item>
-      <v-list-item-avatar v-if="post.createdBy" size="30">
+      <v-list-item-avatar v-if="post.createdBy">
         <slot></slot>
       </v-list-item-avatar>
       <v-list-item-content>

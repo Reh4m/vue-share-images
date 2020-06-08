@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <!-- loading spinner -->
-    <v-overlay absolute v-model="loading">
+    <v-overlay v-model="loading">
       <v-progress-circular indeterminate size="64"/>
     </v-overlay>
 

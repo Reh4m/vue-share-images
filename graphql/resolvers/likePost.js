@@ -7,7 +7,8 @@ module.exports = {
         { $inc: { likes: 1 } },
         { new: true }
       );
-      // find user, add id at post to its favorites array (whitch will be populate as posts)
+      // find user, add id at post to its favorites array
+      // (whitch will be populate as posts)
       const user = await User.findOneAndUpdate(
         { username },
         { $addToSet: { favorites: postId } },
@@ -26,7 +27,8 @@ module.exports = {
         { $inc: { likes: -1 } },
         { new: true }
         );
-        // find user, remove id of post from its favorites array (whitch will be populate as posts)
+        // find user, remove id of post from its favorites array
+        // (whitch will be populate as posts)
       const user = await User.findOneAndUpdate(
         { username },
         { $pull: { favorites: postId } },

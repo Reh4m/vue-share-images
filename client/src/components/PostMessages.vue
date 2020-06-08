@@ -45,7 +45,7 @@
 
       <!-- messages -->
       <v-list three-line>
-        <v-subheader class="caption darklighten--text">
+        <v-subheader class="darklighten--text">
           {{ messages.length }} Messages
         </v-subheader>
         <div v-if="messages.length">
@@ -77,7 +77,7 @@
                 icon
                 @click="handleDeleteUserMessage(message._id, index)"
               >
-                <v-icon>mdi-delete-outline</v-icon>
+                <v-icon>mdi-close-circle</v-icon>
               </v-btn>
             </v-list-item-action>
           </v-list-item>

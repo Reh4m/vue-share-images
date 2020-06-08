@@ -29,7 +29,7 @@
               </v-list-item-subtitle>
             </v-list-item-content>
             <v-list-item-action>
-              <v-icon large color="info" @click="goToPreviousPage">
+              <v-icon large @click="goToPreviousPage">
                 mdi-arrow-left
               </v-icon>
             </v-list-item-action>

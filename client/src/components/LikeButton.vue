@@ -84,7 +84,10 @@ export default {
         }
       }).then(({ data }) => {
         this.loadingLike = false;
-        const updatedUser = { ...this.user, favorites: data.likePost.favorites };
+        const updatedUser = {
+          ...this.user,
+          favorites: data.likePost.favorites
+        };
         this.$store.commit('setUser', updatedUser);
       }).catch(err => {
         this.loadingLike = false;
@@ -114,7 +117,10 @@ export default {
         }
       }).then(({ data }) => {
         this.loadingLike = false;
-        const updatedUser = { ...this.user, favorites: data.unlikePost.favorites };
+        const updatedUser = {
+          ...this.user,
+          favorites: data.unlikePost.favorites
+        };
         this.$store.commit('setUser', updatedUser);
       }).catch(err => {
         this.loadingLike = false;
