@@ -19,7 +19,7 @@
     "graphql": "^14.6.0",
     "graphql-tag": "^2.10.3",
     "mdi": "^2.2.43",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "vue": "^2.6.11",
     "vue-apollo": "^3.0.3",
     "vue-error-page": "^1.1.7",
